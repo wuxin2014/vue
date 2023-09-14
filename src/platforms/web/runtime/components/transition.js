@@ -40,6 +40,7 @@ function getRealChild (vnode: ?VNode): ?VNode {
   }
 }
 
+// 提取transition的data数据
 export function extractTransitionData (comp: Component): Object {
   const data = {}
   const options: ComponentOptions = comp.$options

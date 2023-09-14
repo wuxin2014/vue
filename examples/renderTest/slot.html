@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Vue.js tree view example</title>
+    <style>
+      body {
+        font-family: Menlo, Consolas, monospace;
+        color: #444;
+      }
+      .item {
+        cursor: pointer;
+      }
+      .bold {
+        font-weight: bold;
+      }
+      ul {
+        padding-left: 1em;
+        line-height: 1.5em;
+        list-style-type: dot;
+      }
+    </style>
+    <script src="../../dist/vue.js"></script>
+  </head>
+  <body>
+
+    <!-- item template -->
+    <script type="text/x-template" id="list-template">
+     <div>
+        <slot></slot>
+        <li v-for="(item, key) in list" :key="key">{{ item }}</li>
+     </div>
+    </script>
+    <div id="app">
+      <list :list="list">
+        <div>{{name || 'slotTest'}}</div>
+      </list>
+    </div>
+    <script src="common.js"></script>
+  </body>
+</html>

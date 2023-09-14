@@ -27,6 +27,7 @@ function matches (pattern: string | RegExp | Array<string>, name: string): boole
   return false
 }
 
+// 修剪缓存
 function pruneCache (keepAliveInstance: any, filter: Function) {
   const { cache, keys, _vnode } = keepAliveInstance
   for (const key in cache) {
@@ -98,6 +99,7 @@ export default {
   },
 
   mounted () {
+    // 做缓存处理
     this.cacheVNode()
     this.$watch('include', val => {
       pruneCache(this, name => matches(val, name))

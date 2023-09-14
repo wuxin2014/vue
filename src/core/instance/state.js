@@ -286,6 +286,7 @@ function initMethods (vm: Component, methods: Object) {
         )
       }
     }
+    // methods处理，直接放到vm了实例上, 注意bind()
     vm[key] = typeof methods[key] !== 'function' ? noop : bind(methods[key], vm)
   }
 }
@@ -309,6 +310,7 @@ function createWatcher (
   handler: any,
   options?: Object
 ) {
+  // handler可能是对象，函数，字符串(没理解)
   if (isPlainObject(handler)) {
     options = handler
     handler = handler.handler
@@ -356,7 +358,9 @@ export function stateMixin (Vue: Class<Component>) {
     }
     options = options || {}
     options.user = true
+    // userWatcher
     const watcher = new Watcher(vm, expOrFn, cb, options)
+    // 立马执行的参数
     if (options.immediate) {
       const info = `callback for immediate watcher "${watcher.expression}"`
       pushTarget()

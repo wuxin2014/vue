@@ -30,7 +30,7 @@ export default class VNode {
   fnScopeId: ?string; // functional scope id support
 
   constructor (
-    tag?: string,
+    tag?: string, // tagName
     data?: VNodeData,
     children?: ?Array<VNode>,
     text?: string,

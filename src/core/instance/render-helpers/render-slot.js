@@ -4,6 +4,7 @@ import { extend, warn, isObject } from 'core/util/index'
 
 /**
  * Runtime helper for rendering <slot>
+ * 渲染插槽处理 _t("default")
  */
 export function renderSlot (
   name: string,
@@ -11,7 +12,8 @@ export function renderSlot (
   props: ?Object,
   bindObject: ?Object
 ): ?Array<VNode> {
-  const scopedSlotFn = this.$scopedSlots[name]
+  debugger
+  const scopedSlotFn = this.$scopedSlots[name] // 有值的话，应该是函数
   let nodes
   if (scopedSlotFn) {
     // scoped slot
@@ -22,6 +24,7 @@ export function renderSlot (
       }
       props = extend(extend({}, bindObject), props)
     }
+    // scopedSlotFn函数的执行
     nodes =
       scopedSlotFn(props) ||
       (typeof fallbackRender === 'function' ? fallbackRender() : fallbackRender)

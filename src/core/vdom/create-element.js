@@ -24,15 +24,16 @@ const SIMPLE_NORMALIZE = 1
 const ALWAYS_NORMALIZE = 2
 
 // wrapper function for providing a more flexible interface
-// without getting yelled at by flow
+// without getting yelled at by flow  走createElement函数，生成Vnode
 export function createElement (
   context: Component,
-  tag: any,
-  data: any,
-  children: any,
+  tag: any, // 标签名
+  data: any, // 标签上各种属性
+  children: any, // 子VNode
   normalizationType: any,
   alwaysNormalize: boolean
 ): VNode | Array<VNode> {
+  // 兼容不传data的情况
   if (Array.isArray(data) || isPrimitive(data)) {
     normalizationType = children
     children = data
@@ -51,6 +52,7 @@ export function _createElement (
   children?: any,
   normalizationType?: number
 ): VNode | Array<VNode> {
+  debugger
   if (isDef(data) && isDef((data: any).__ob__)) {
     process.env.NODE_ENV !== 'production' && warn(
       `Avoid using observed data object as vnode data: ${JSON.stringify(data)}\n` +
@@ -109,7 +111,7 @@ export function _createElement (
         undefined, undefined, context
       )
     } else if ((!data || !data.pre) && isDef(Ctor = resolveAsset(context.$options, 'components', tag))) {
-      // component
+      // component createComponent(Ctor, data, context, children, tag)
       vnode = createComponent(Ctor, data, context, children, tag)
     } else {
       // unknown or unlisted namespaced elements
@@ -121,7 +123,7 @@ export function _createElement (
       )
     }
   } else {
-    // direct component options / constructor
+    // direct component options / constructor createComponent(Ctor, data, context, children[, tag])
     vnode = createComponent(tag, data, context, children)
   }
   if (Array.isArray(vnode)) {

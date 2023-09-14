@@ -52,7 +52,7 @@ export function resolveAsyncComponent (
     return factory.resolved
   }
 
-  const owner = currentRenderingInstance
+  const owner = currentRenderingInstance // 注意这里的渲染实例赋值
   if (owner && isDef(factory.owners) && factory.owners.indexOf(owner) === -1) {
     // already pending
     factory.owners.push(owner)
@@ -70,6 +70,7 @@ export function resolveAsyncComponent (
 
     ;(owner: any).$on('hook:destroyed', () => remove(owners, owner))
 
+    // 这里会调用实例的$forceUpdate()函数，进行强制刷新
     const forceRender = (renderCompleted: boolean) => {
       for (let i = 0, l = owners.length; i < l; i++) {
         (owners[i]: any).$forceUpdate()

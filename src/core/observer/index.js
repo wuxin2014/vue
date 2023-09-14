@@ -43,14 +43,14 @@ export class Observer {
     this.value = value
     this.dep = new Dep()
     this.vmCount = 0
-    def(value, '__ob__', this)
+    def(value, '__ob__', this) // value可能是对象，可能是数组
     if (Array.isArray(value)) {
       if (hasProto) {
         protoAugment(value, arrayMethods)
       } else {
         copyAugment(value, arrayMethods, arrayKeys)
       }
-      this.observeArray(value)
+      this.observeArray(value) // 数组单个元素进行观察
     } else {
       this.walk(value)
     }
@@ -86,7 +86,7 @@ export class Observer {
  */
 function protoAugment (target, src: Object) {
   /* eslint-disable no-proto */
-  target.__proto__ = src
+  target.__proto__ = src // 实例__proto__ 指向 构造函数原型对象
   /* eslint-enable no-proto */
 }
 
@@ -149,15 +149,16 @@ export function defineReactive (
   // cater for pre-defined getter/setters
   const getter = property && property.get
   const setter = property && property.set
-  if ((!getter || setter) && arguments.length === 2) {
+  if ((!getter || setter) && arguments.length === 2) { // arguments.length === 2 说明defineReactive()只传了obj,key
     val = obj[key]
   }
 
-  let childOb = !shallow && observe(val)
+  let childOb = !shallow && observe(val) // 继续观察val，val可能是对象或数组类型数据
   Object.defineProperty(obj, key, {
     enumerable: true,
     configurable: true,
     get: function reactiveGetter () {
+      debugger
       const value = getter ? getter.call(obj) : val
       if (Dep.target) {
         dep.depend()
@@ -171,6 +172,7 @@ export function defineReactive (
       return value
     },
     set: function reactiveSetter (newVal) {
+      debugger
       const value = getter ? getter.call(obj) : val
       /* eslint-disable no-self-compare */
       if (newVal === value || (newVal !== newVal && value !== value)) {
@@ -204,11 +206,13 @@ export function set (target: Array<any> | Object, key: any, val: any): any {
   ) {
     warn(`Cannot set reactive property on undefined, null, or primitive value: ${(target: any)}`)
   }
+  // 更改数组
   if (Array.isArray(target) && isValidArrayIndex(key)) {
     target.length = Math.max(target.length, key)
     target.splice(key, 1, val)
     return val
   }
+  // 更改对象中已有的属性
   if (key in target && !(key in Object.prototype)) {
     target[key] = val
     return val
@@ -225,7 +229,8 @@ export function set (target: Array<any> | Object, key: any, val: any): any {
     target[key] = val
     return val
   }
-  defineReactive(ob.value, key, val)
+  // 数组跟对象新增项或者属性
+  defineReactive(ob.value, key, val) // 注意ob.value
   ob.dep.notify()
   return val
 }

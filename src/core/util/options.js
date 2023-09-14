@@ -26,7 +26,7 @@ import {
  * how to merge a parent option value and a child option
  * value into the final value.
  */
-const strats = config.optionMergeStrategies
+const strats = config.optionMergeStrategies // options合并策略模式
 
 /**
  * Options with restrictions
@@ -45,22 +45,25 @@ if (process.env.NODE_ENV !== 'production') {
 
 /**
  * Helper that recursively merges two data objects together.
+ * to是更新后的数据
+ * from是原来的数据
  */
 function mergeData (to: Object, from: ?Object): Object {
   if (!from) return to
   let key, toVal, fromVal
 
+  // 拿到from对象的keys数组
   const keys = hasSymbol
     ? Reflect.ownKeys(from)
     : Object.keys(from)
 
   for (let i = 0; i < keys.length; i++) {
     key = keys[i]
-    // in case the object is already observed...
+    // in case the object is already observed... 该对象已经被监测了
     if (key === '__ob__') continue
     toVal = to[key]
     fromVal = from[key]
-    if (!hasOwn(to, key)) {
+    if (!hasOwn(to, key)) { // 如果to对象中不包含当前key，set下
       set(to, key, fromVal)
     } else if (
       toVal !== fromVal &&
@@ -118,6 +121,7 @@ export function mergeDataOrFn (
   }
 }
 
+// 合并data的策略模式
 strats.data = function (
   parentVal: any,
   childVal: any,
@@ -141,7 +145,7 @@ strats.data = function (
 }
 
 /**
- * Hooks and props are merged as arrays.
+ * Hooks and props are merged as arrays. 钩子函数合并后是数组
  */
 function mergeHook (
   parentVal: ?Array<Function>,
@@ -158,7 +162,7 @@ function mergeHook (
     ? dedupeHooks(res)
     : res
 }
-
+// 去重处理
 function dedupeHooks (hooks) {
   const res = []
   for (let i = 0; i < hooks.length; i++) {
@@ -189,12 +193,13 @@ function mergeAssets (
   const res = Object.create(parentVal || null)
   if (childVal) {
     process.env.NODE_ENV !== 'production' && assertObjectType(key, childVal, vm)
-    return extend(res, childVal)
+    return extend(res, childVal) // 将childVal的属性赋值到res对象
   } else {
     return res
   }
 }
 
+// 局部资源注册的处理：filters,components, directives
 ASSET_TYPES.forEach(function (type) {
   strats[type + 's'] = mergeAssets
 })
@@ -252,7 +257,7 @@ strats.computed = function (
   }
   if (!parentVal) return childVal
   const ret = Object.create(null)
-  extend(ret, parentVal)
+  extend(ret, parentVal) // 先合并parentVal，再合并childVal，这样的话遇到同名的进行了覆盖
   if (childVal) extend(ret, childVal)
   return ret
 }
@@ -292,6 +297,7 @@ export function validateComponentName (name: string) {
 }
 
 /**
+ * 规范化属性
  * Ensure all props option syntax are normalized into the
  * Object-based format.
  */
@@ -410,6 +416,7 @@ export function mergeOptions (
     if (child.extends) {
       parent = mergeOptions(parent, child.extends, vm)
     }
+    // 遇到mixins，数组长度大于0,进行递归属性合并
     if (child.mixins) {
       for (let i = 0, l = child.mixins.length; i < l; i++) {
         parent = mergeOptions(parent, child.mixins[i], vm)

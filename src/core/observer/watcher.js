@@ -127,11 +127,11 @@ export default class Watcher {
    * Add a dependency to this directive.
    */
   addDep (dep: Dep) {
-    const id = dep.id
-    if (!this.newDepIds.has(id)) {
+    const id = dep.id // 取出dep的id
+    if (!this.newDepIds.has(id)) { // 判断newDepIds是否存在id,不存在添加(例如在模板多次用到了data中的一个属性值) 
       this.newDepIds.add(id)
       this.newDeps.push(dep)
-      if (!this.depIds.has(id)) {
+      if (!this.depIds.has(id)) { // 若当前Watcher下，如果depIds已经存在id, 无需再次在dep中追加当前watcher (如更新后再次渲染)
         dep.addSub(this)
       }
     }
@@ -141,21 +141,21 @@ export default class Watcher {
    * Clean up for dependency collection.
    */
   cleanupDeps () {
-    let i = this.deps.length
-    while (i--) {
+    let i = this.deps.length // 更新时deps应该是有值的
+    while (i--) { 
       const dep = this.deps[i]
-      if (!this.newDepIds.has(dep.id)) {
+      if (!this.newDepIds.has(dep.id)) { // 更新渲染后，若newDepIds不存在的移除（举例：v-if,展示不展示）
         dep.removeSub(this)
       }
     }
     let tmp = this.depIds
-    this.depIds = this.newDepIds
+    this.depIds = this.newDepIds // 将newDepIds赋值给depIds
     this.newDepIds = tmp
-    this.newDepIds.clear()
+    this.newDepIds.clear() // 清空newDepIds
     tmp = this.deps
-    this.deps = this.newDeps
+    this.deps = this.newDeps // 将newDeps赋值给deps
     this.newDeps = tmp
-    this.newDeps.length = 0
+    this.newDeps.length = 0  // 清空newDeps
   }
 
   /**
@@ -193,6 +193,7 @@ export default class Watcher {
         this.value = value
         if (this.user) {
           const info = `callback for watcher "${this.expression}"`
+          // userWatcher, 新值跟旧值问题
           invokeWithErrorHandling(this.cb, this.vm, [value, oldValue], this.vm, info)
         } else {
           this.cb.call(this.vm, value, oldValue)

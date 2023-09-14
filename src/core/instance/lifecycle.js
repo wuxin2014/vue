@@ -47,7 +47,7 @@ export function initLifecycle (vm: Component) {
   vm.$children = []
   vm.$refs = {}
 
-  vm._watcher = null
+  vm._watcher = null // 渲染Watcher
   vm._inactive = null
   vm._directInactive = false
   vm._isMounted = false
@@ -143,7 +143,7 @@ export function mountComponent (
   el: ?Element,
   hydrating?: boolean
 ): Component {
-  vm.$el = el
+  vm.$el = el // todo 注意这里的$el
   if (!vm.$options.render) {
     vm.$options.render = createEmptyVNode
     if (process.env.NODE_ENV !== 'production') {
@@ -194,6 +194,8 @@ export function mountComponent (
   // we set this to vm._watcher inside the watcher's constructor
   // since the watcher's initial patch may call $forceUpdate (e.g. inside child
   // component's mounted hook), which relies on vm._watcher being already defined
+  debugger
+  // 渲染Watcher
   new Watcher(vm, updateComponent, noop, {
     before () {
       if (vm._isMounted && !vm._isDestroyed) {
@@ -213,10 +215,10 @@ export function mountComponent (
 }
 
 export function updateChildComponent (
-  vm: Component,
-  propsData: ?Object,
-  listeners: ?Object,
-  parentVnode: MountedComponentVNode,
+  vm: Component, // 组件实例
+  propsData: ?Object,// update时新的propsData
+  listeners: ?Object, // update时新的事件
+  parentVnode: MountedComponentVNode, // 组件vnode
   renderChildren: ?Array<VNode>
 ) {
   if (process.env.NODE_ENV !== 'production') {

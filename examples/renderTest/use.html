@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Vue-Mixin</title>
+    <style>
+        body {
+            font-family: Menlo, Consolas, monospace;
+            color: #444;
+        }
+    </style>
+    <!-- Delete ".min" for console warnings in development -->
+    <script src="../../dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <input v-model="name" />
+        <span @click="showAge">{{ age }}</span>
+    </div>
+    <script>
+        // 通过全局方法 Vue.use() 使用插件。它需要在你调用 new Vue() 启动应用之前完成
+        var MyPlugin = {}
+        MyPlugin.install = function (Vue, options) {
+            // 1. 添加全局方法或 property
+            Vue.myGlobalMethod = function () {
+                // 逻辑...
+            }
+
+            // 2. 添加全局资源
+            Vue.directive('my-directive', {
+                bind(el, binding, vnode, oldVnode) {
+                    // 逻辑...
+                }
+            })
+
+            // 3. 注入组件选项
+            Vue.mixin({
+                created: function () {
+                    // 逻辑...
+                }
+            })
+
+            // 4. 添加实例方法
+            Vue.prototype.$myMethod = function (methodOptions) {
+                // 逻辑...
+            }
+        }
+
+        Vue.use(MyPlugin)
+
+        var app = new Vue({
+            el: '#app',
+            data() {
+                return { name: 'test', age: '1000' }
+            },
+            methods: {
+                showAge() {
+                    console.log('====')
+                }
+            }
+        })
+
+        console.log('app', app)
+    </script>
+</body>
+
+</html>

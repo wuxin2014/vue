@@ -54,7 +54,7 @@ const componentVNodeHooks = {
 
   prepatch (oldVnode: MountedComponentVNode, vnode: MountedComponentVNode) {
     const options = vnode.componentOptions
-    const child = vnode.componentInstance = oldVnode.componentInstance
+    const child = vnode.componentInstance = oldVnode.componentInstance // 将旧的vnode实例赋值给新的vnode
     updateChildComponent(
       child,
       options.propsData, // updated props
@@ -108,10 +108,10 @@ export function createComponent (
   if (isUndef(Ctor)) {
     return
   }
-
+  // Ctor：全局注册组件，Ctor是构造函数类，函数式组件；局部注册组件，Ctor是对象, 可以是普通函数(异步组件)
   const baseCtor = context.$options._base
 
-  // plain options object: turn it into a constructor
+  // plain options object: turn it into a constructor 构建子类构造函数
   if (isObject(Ctor)) {
     Ctor = baseCtor.extend(Ctor)
   }
@@ -144,7 +144,7 @@ export function createComponent (
     }
   }
 
-  data = data || {}
+  data = data || {}  // 组件标签上的属性 { attrs, on, nativeOn, model, slot }
 
   // resolve constructor options in case global mixins are applied after
   // component constructor creation
@@ -158,7 +158,7 @@ export function createComponent (
   // extract props
   const propsData = extractPropsFromVNodeData(data, Ctor, tag)
 
-  // functional component
+  // functional component 函数组件
   if (isTrue(Ctor.options.functional)) {
     return createFunctionalComponent(Ctor, propsData, data, context, children)
   }
@@ -170,7 +170,8 @@ export function createComponent (
   // so it gets processed during parent component patch.
   data.on = data.nativeOn
 
-  if (isTrue(Ctor.options.abstract)) {
+  if (isTrue(Ctor.options.abstract)) { 
+    // keep-alive组件
     // abstract components do not keep anything
     // other than props & listeners & slot
 
@@ -187,6 +188,7 @@ export function createComponent (
 
   // return a placeholder vnode
   const name = Ctor.options.name || tag
+  // VNode(tag, data, children, text, elm, context, componentOptions, asyncFactory)
   const vnode = new VNode(
     `vue-component-${Ctor.cid}${name ? `-${name}` : ''}`,
     data, undefined, undefined, undefined, context,
@@ -213,8 +215,8 @@ export function createComponentInstanceForVnode (
 ): Component {
   const options: InternalComponentOptions = {
     _isComponent: true,
-    _parentVnode: vnode,
-    parent
+    _parentVnode: vnode, // _parentVnode指向组件vnode
+    parent // parent指向父类实例
   }
   // check inline-template render functions
   const inlineTemplate = vnode.data.inlineTemplate

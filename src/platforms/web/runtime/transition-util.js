@@ -21,6 +21,7 @@ export function resolveTransition (def?: string | Object): ?Object {
   }
 }
 
+// 添加默认css过度钩子，如v-enter, v-enter-active, v-enter-to, v-leave, v-leave-active, v-leave-to；name无值才会取v，否则是name
 const autoCssTransition: (name: string) => Object = cached(name => {
   return {
     enterClass: `${name}-enter`,

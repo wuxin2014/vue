@@ -43,7 +43,7 @@ function createOnceHandler (event, handler, capture) {
 // #9446: Firefox <= 53 (in particular, ESR 52) has incorrect Event.timeStamp
 // implementation and does not fire microtasks in between event propagation, so
 // safe to exclude.
-const useMicrotaskFix = isUsingMicroTask && !(isFF && Number(isFF[1]) <= 53)
+const useMicrotaskFix = isUsingMicroTask && !(isFF && Number(isFF[1]) <= 53) // isFF[1]: 指向匹配到第一个分组，这个值代表火狐版本号
 
 function add (
   name: string,

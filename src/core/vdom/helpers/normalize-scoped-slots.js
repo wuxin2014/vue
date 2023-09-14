@@ -32,12 +32,14 @@ export function normalizeScopedSlots (
     return prevSlots
   } else {
     res = {}
+    // 首次渲染处理作用域插槽
     for (const key in slots) {
       if (slots[key] && key[0] !== '$') {
         res[key] = normalizeScopedSlot(normalSlots, key, slots[key])
       }
     }
   }
+  // 处理普通插槽normalSlots
   // expose normal slots on scopedSlots
   for (const key in normalSlots) {
     if (!(key in res)) {
@@ -57,6 +59,7 @@ export function normalizeScopedSlots (
 
 function normalizeScopedSlot(normalSlots, key, fn) {
   const normalized = function () {
+    debugger
     let res = arguments.length ? fn.apply(null, arguments) : fn({})
     res = res && typeof res === 'object' && !Array.isArray(res)
       ? [res] // single vnode

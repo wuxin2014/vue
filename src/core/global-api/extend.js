@@ -14,7 +14,7 @@ export function initExtend (Vue: GlobalAPI) {
   let cid = 1
 
   /**
-   * Class inheritance
+   * Class inheritance 扩展
    */
   Vue.extend = function (extendOptions: Object): Function {
     extendOptions = extendOptions || {}
@@ -29,13 +29,14 @@ export function initExtend (Vue: GlobalAPI) {
     if (process.env.NODE_ENV !== 'production' && name) {
       validateComponentName(name)
     }
-
+    // 构建子类构造函数
     const Sub = function VueComponent (options) {
       this._init(options)
     }
     Sub.prototype = Object.create(Super.prototype)
     Sub.prototype.constructor = Sub
     Sub.cid = cid++
+    // 子类options时，调用mergeOptions
     Sub.options = mergeOptions(
       Super.options,
       extendOptions
@@ -83,7 +84,7 @@ export function initExtend (Vue: GlobalAPI) {
 function initProps (Comp) {
   const props = Comp.options.props
   for (const key in props) {
-    proxy(Comp.prototype, `_props`, key)
+    proxy(Comp.prototype, `_props`, key) // 
   }
 }
 

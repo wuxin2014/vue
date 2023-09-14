@@ -23,6 +23,7 @@ let flushing = false
 let index = 0
 
 /**
+ * 重置Scheduler的状态值
  * Reset the scheduler's state.
  */
 function resetSchedulerState () {
@@ -66,11 +67,12 @@ if (inBrowser && !isIE) {
 }
 
 /**
+ * 刷新调度程序队列
  * Flush both queues and run the watchers.
  */
 function flushSchedulerQueue () {
   currentFlushTimestamp = getNow()
-  flushing = true
+  flushing = true // 注意flushing的值被赋值成了true
   let watcher, id
 
   // Sort queue before flush.
@@ -91,8 +93,8 @@ function flushSchedulerQueue () {
       watcher.before()
     }
     id = watcher.id
-    has[id] = null
-    watcher.run()
+    has[id] = null // 这里has[id]置空了
+    watcher.run() // 注意这里调用了watcher的run方法
     // in dev build, check and stop circular updates.
     if (process.env.NODE_ENV !== 'production' && has[id] != null) {
       circular[id] = (circular[id] || 0) + 1
@@ -112,13 +114,13 @@ function flushSchedulerQueue () {
 
   // keep copies of post queues before resetting state
   const activatedQueue = activatedChildren.slice()
-  const updatedQueue = queue.slice()
+  const updatedQueue = queue.slice()  // 等同浅拷贝，为什么对queue进行拷贝
 
   resetSchedulerState()
 
   // call component updated and activated hooks
   callActivatedHooks(activatedQueue)
-  callUpdatedHooks(updatedQueue)
+  callUpdatedHooks(updatedQueue) // 为了调用update钩子函数
 
   // devtool hook
   /* istanbul ignore if */
@@ -133,7 +135,7 @@ function callUpdatedHooks (queue) {
     const watcher = queue[i]
     const vm = watcher.vm
     if (vm._watcher === watcher && vm._isMounted && !vm._isDestroyed) {
-      callHook(vm, 'updated')
+      callHook(vm, 'updated') // 为了调用update钩子函数
     }
   }
 }
@@ -165,8 +167,8 @@ export function queueWatcher (watcher: Watcher) {
   const id = watcher.id
   if (has[id] == null) {
     has[id] = true
-    if (!flushing) {
-      queue.push(watcher)
+    if (!flushing) { // 是否刷新(冲刷)中
+      queue.push(watcher) // 队列中追加watcher对象
     } else {
       // if already flushing, splice the watcher based on its id
       // if already past its id, it will be run next immediately.
@@ -174,10 +176,10 @@ export function queueWatcher (watcher: Watcher) {
       while (i > index && queue[i].id > watcher.id) {
         i--
       }
-      queue.splice(i + 1, 0, watcher)
+      queue.splice(i + 1, 0, watcher) // 队列中追加一个watcher(什么场景下呢)
     }
     // queue the flush
-    if (!waiting) {
+    if (!waiting) { // 是否等待中
       waiting = true
 
       if (process.env.NODE_ENV !== 'production' && !config.async) {

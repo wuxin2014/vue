@@ -29,7 +29,7 @@ export function enter (vnode: VNodeWithData, toggleDisplay: ?() => void) {
     el._leaveCb()
   }
 
-  const data = resolveTransition(vnode.data.transition)
+  const data = resolveTransition(vnode.data.transition) // 注意这一步解析vnode.data.transition
   if (isUndef(data)) {
     return
   }
@@ -57,7 +57,7 @@ export function enter (vnode: VNodeWithData, toggleDisplay: ?() => void) {
     afterAppear,
     appearCancelled,
     duration
-  } = data
+  } = data  // 注意type, css, duration
 
   // activeInstance will always be the <transition> component managing this
   // transition. One edge case to check is when the <transition> is placed

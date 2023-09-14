@@ -12,8 +12,8 @@ let pending = false
 
 function flushCallbacks () {
   pending = false
-  const copies = callbacks.slice(0)
-  callbacks.length = 0
+  const copies = callbacks.slice(0) // arr.slice(0)等同浅拷贝
+  callbacks.length = 0 // 清空callbacks数组
   for (let i = 0; i < copies.length; i++) {
     copies[i]()
   }
@@ -86,6 +86,7 @@ if (typeof Promise !== 'undefined' && isNative(Promise)) {
 
 export function nextTick (cb?: Function, ctx?: Object) {
   let _resolve
+  // 往callbacks数组中追加函数
   callbacks.push(() => {
     if (cb) {
       try {
@@ -97,10 +98,12 @@ export function nextTick (cb?: Function, ctx?: Object) {
       _resolve(ctx)
     }
   })
-  if (!pending) {
+
+  if (!pending) { // 是否待定中
     pending = true
-    timerFunc()
+    timerFunc() // 异步函数
   }
+  // 若nextTick函数没有传cb函数，就返回一个Promise
   // $flow-disable-line
   if (!cb && typeof Promise !== 'undefined') {
     return new Promise(resolve => {

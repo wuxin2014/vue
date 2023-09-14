@@ -83,6 +83,7 @@ export function createPatchFunction (backend) {
   }
 
   function emptyNodeAt (elm) {
+    // VNode(tag, data, children, text, elm, context?, componentOptions?, asyncFactory?)
     return new VNode(nodeOps.tagName(elm).toLowerCase(), {}, [], undefined, elm)
   }
 
@@ -125,11 +126,11 @@ export function createPatchFunction (backend) {
   function createElm (
     vnode,
     insertedVnodeQueue,
-    parentElm,
-    refElm,
-    nested,
-    ownerArray,
-    index
+    parentElm, // 父节点
+    refElm, // 兄弟节点
+    nested, // 是否是内嵌的
+    ownerArray, // 所属children数组
+    index // 在children数组的下标
   ) {
     if (isDef(vnode.elm) && isDef(ownerArray)) {
       // This vnode was used in a previous render!
@@ -163,6 +164,7 @@ export function createPatchFunction (backend) {
         }
       }
 
+      // 创建真实的dom元素
       vnode.elm = vnode.ns
         ? nodeOps.createElementNS(vnode.ns, tag)
         : nodeOps.createElement(tag, vnode)
@@ -212,14 +214,16 @@ export function createPatchFunction (backend) {
     if (isDef(i)) {
       const isReactivated = isDef(vnode.componentInstance) && i.keepAlive
       if (isDef(i = i.hook) && isDef(i = i.init)) {
-        i(vnode, false /* hydrating */)
+        i(vnode, false /* hydrating */) // 走组件的init钩子函数
       }
       // after calling the init hook, if the vnode is a child component
       // it should've created a child instance and mounted it. the child
       // component also has set the placeholder vnode's elm.
       // in that case we can just return the element and be done.
       if (isDef(vnode.componentInstance)) {
+        // todo这一步的作用是什么
         initComponent(vnode, insertedVnodeQueue)
+        // 组件的插入真实dom
         insert(parentElm, vnode.elm, refElm)
         if (isTrue(isReactivated)) {
           reactivateComponent(vnode, insertedVnodeQueue, parentElm, refElm)
@@ -230,6 +234,7 @@ export function createPatchFunction (backend) {
   }
 
   function initComponent (vnode, insertedVnodeQueue) {
+    // todo vnode.data.pendingInsert在哪里赋的值
     if (isDef(vnode.data.pendingInsert)) {
       insertedVnodeQueue.push.apply(insertedVnodeQueue, vnode.data.pendingInsert)
       vnode.data.pendingInsert = null
@@ -296,19 +301,19 @@ export function createPatchFunction (backend) {
 
   function isPatchable (vnode) {
     while (vnode.componentInstance) {
-      vnode = vnode.componentInstance._vnode
+      vnode = vnode.componentInstance._vnode  // 组件要渲染的vnode
     }
     return isDef(vnode.tag)
   }
-
+  // 执行创建各类别钩子
   function invokeCreateHooks (vnode, insertedVnodeQueue) {
     for (let i = 0; i < cbs.create.length; ++i) {
       cbs.create[i](emptyNode, vnode)
     }
     i = vnode.data.hook // Reuse variable
     if (isDef(i)) {
-      if (isDef(i.create)) i.create(emptyNode, vnode)
-      if (isDef(i.insert)) insertedVnodeQueue.push(vnode)
+      if (isDef(i.create)) i.create(emptyNode, vnode) // i.create是指令钩子
+      if (isDef(i.insert)) insertedVnodeQueue.push(vnode) // i.insert是componnetVnodeHooks中insert钩子函数,也可能是指令钩子
     }
   }
 
@@ -343,7 +348,7 @@ export function createPatchFunction (backend) {
       createElm(vnodes[startIdx], insertedVnodeQueue, parentElm, refElm, false, vnodes, startIdx)
     }
   }
-
+  // 执行销毁各类别钩子
   function invokeDestroyHook (vnode) {
     let i, j
     const data = vnode.data
@@ -542,13 +547,16 @@ export function createPatchFunction (backend) {
     let i
     const data = vnode.data
     if (isDef(data) && isDef(i = data.hook) && isDef(i = i.prepatch)) {
-      i(oldVnode, vnode)
+      i(oldVnode, vnode) // 组件更新时走的钩子函数prepatch()
     }
 
     const oldCh = oldVnode.children
     const ch = vnode.children
+    // 有data属性情况下且vnode.tag存在
     if (isDef(data) && isPatchable(vnode)) {
+      // update: class,style,ref,domlisterner,domprops, directive(往data.hook中注入postpatch)
       for (i = 0; i < cbs.update.length; ++i) cbs.update[i](oldVnode, vnode)
+      // data.hook什么情况下会有update方法（指令）
       if (isDef(i = data.hook) && isDef(i = i.update)) i(oldVnode, vnode)
     }
     if (isUndef(vnode.text)) {
@@ -569,18 +577,20 @@ export function createPatchFunction (backend) {
       nodeOps.setTextContent(elm, vnode.text)
     }
     if (isDef(data)) {
+      // postpatch是指令钩子
       if (isDef(i = data.hook) && isDef(i = i.postpatch)) i(oldVnode, vnode)
     }
   }
 
+  // 执行插入各类别钩子
   function invokeInsertHook (vnode, queue, initial) {
     // delay insert hooks for component root nodes, invoke them after the
     // element is really inserted
     if (isTrue(initial) && isDef(vnode.parent)) {
-      vnode.parent.data.pendingInsert = queue
+      vnode.parent.data.pendingInsert = queue  // 注意这里的赋值 vnode.parent => 组件vnode
     } else {
       for (let i = 0; i < queue.length; ++i) {
-        queue[i].data.hook.insert(queue[i])
+        queue[i].data.hook.insert(queue[i])  // 会执行组件mounted生命周期
       }
     }
   }
@@ -702,7 +712,7 @@ export function createPatchFunction (backend) {
       if (isDef(oldVnode)) invokeDestroyHook(oldVnode)
       return
     }
-
+    debugger
     let isInitialPatch = false
     const insertedVnodeQueue = []
 
@@ -740,12 +750,12 @@ export function createPatchFunction (backend) {
           }
           // either not server-rendered, or hydration failed.
           // create an empty node and replace it
-          oldVnode = emptyNodeAt(oldVnode)
+          oldVnode = emptyNodeAt(oldVnode) // 根据元素节点得到一个空的vnode
         }
 
         // replacing existing element
-        const oldElm = oldVnode.elm
-        const parentElm = nodeOps.parentNode(oldElm)
+        const oldElm = oldVnode.elm // 旧的节点元素
+        const parentElm = nodeOps.parentNode(oldElm) // 找其父节点元素 => 应该是body元素
 
         // create new node
         createElm(
@@ -755,7 +765,7 @@ export function createPatchFunction (backend) {
           // leaving transition. Only happens when combining transition +
           // keep-alive + HOCs. (#4590)
           oldElm._leaveCb ? null : parentElm,
-          nodeOps.nextSibling(oldElm)
+          nodeOps.nextSibling(oldElm) // todo 首次应该是null
         )
 
         // update parent placeholder node element, recursively
@@ -797,6 +807,7 @@ export function createPatchFunction (backend) {
       }
     }
 
+    debugger
     invokeInsertHook(vnode, insertedVnodeQueue, isInitialPatch)
     return vnode.elm
   }

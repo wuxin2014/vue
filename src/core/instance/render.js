@@ -21,8 +21,8 @@ export function initRender (vm: Component) {
   vm._staticTrees = null // v-once cached trees
   const options = vm.$options
   const parentVnode = vm.$vnode = options._parentVnode // the placeholder node in parent tree
-  const renderContext = parentVnode && parentVnode.context
-  vm.$slots = resolveSlots(options._renderChildren, renderContext)
+  const renderContext = parentVnode && parentVnode.context // context指向父类的实例
+  vm.$slots = resolveSlots(options._renderChildren, renderContext) // 解析普通插槽的处理
   vm.$scopedSlots = emptyObject
   // bind the createElement fn to this instance
   // so that we get proper render context inside it.
@@ -31,7 +31,8 @@ export function initRender (vm: Component) {
   vm._c = (a, b, c, d) => createElement(vm, a, b, c, d, false)
   // normalization is always applied for the public version, used in
   // user-written render functions.
-  vm.$createElement = (a, b, c, d) => createElement(vm, a, b, c, d, true)
+  // createElement(context, tag, data, children, normalizationType, alwaysNormalize)
+  vm.$createElement = (a, b, c, d) => createElement(vm, a, b, c, d, true) // 注意在_init中调用了initRender()
 
   // $attrs & $listeners are exposed for easier HOC creation.
   // they need to be reactive so that HOCs using them are always updated
@@ -46,6 +47,7 @@ export function initRender (vm: Component) {
       !isUpdatingChildComponent && warn(`$listeners is readonly.`, vm)
     }, true)
   } else {
+    // defineReactive (obj, key, val, customSetter, shallow) 
     defineReactive(vm, '$attrs', parentData && parentData.attrs || emptyObject, null, true)
     defineReactive(vm, '$listeners', options._parentListeners || emptyObject, null, true)
   }
@@ -68,11 +70,12 @@ export function renderMixin (Vue: Class<Component>) {
 
   Vue.prototype._render = function (): VNode {
     const vm: Component = this
+    // 注意render
     const { render, _parentVnode } = vm.$options
 
     if (_parentVnode) {
       vm.$scopedSlots = normalizeScopedSlots(
-        _parentVnode.data.scopedSlots,
+        _parentVnode.data.scopedSlots, // 作用区插槽，parentVnode.data.scopedSlots不会为空
         vm.$slots,
         vm.$scopedSlots
       )
@@ -88,7 +91,7 @@ export function renderMixin (Vue: Class<Component>) {
       // separately from one another. Nested component's render fns are called
       // when parent component is patched.
       currentRenderingInstance = vm
-      vnode = render.call(vm._renderProxy, vm.$createElement)
+      vnode = render.call(vm._renderProxy, vm.$createElement) // todo 注意这一句
     } catch (e) {
       handleError(e, vm, `render`)
       // return error render result,
@@ -123,7 +126,8 @@ export function renderMixin (Vue: Class<Component>) {
       vnode = createEmptyVNode()
     }
     // set parent
-    vnode.parent = _parentVnode
+    vnode.parent = _parentVnode // vnode.parent的设置
     return vnode
   }
+  // vm.$vnode === vnode.parent vm._vnode = vnode
 }

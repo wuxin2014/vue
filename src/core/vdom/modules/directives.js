@@ -24,8 +24,8 @@ function _update (oldVnode, vnode) {
   const oldDirs = normalizeDirectives(oldVnode.data.directives, oldVnode.context)
   const newDirs = normalizeDirectives(vnode.data.directives, vnode.context)
 
-  const dirsWithInsert = []
-  const dirsWithPostpatch = []
+  const dirsWithInsert = [] // 要插入的指令
+  const dirsWithPostpatch = [] // 要更新的指令
 
   let key, oldDir, dir
   for (key in newDirs) {
@@ -47,7 +47,7 @@ function _update (oldVnode, vnode) {
       }
     }
   }
-
+  // 要插入的指令长度大于0的
   if (dirsWithInsert.length) {
     const callInsert = () => {
       for (let i = 0; i < dirsWithInsert.length; i++) {
@@ -60,7 +60,7 @@ function _update (oldVnode, vnode) {
       callInsert()
     }
   }
-
+  // 要更新的指令长度大于0的
   if (dirsWithPostpatch.length) {
     mergeVNodeHook(vnode, 'postpatch', () => {
       for (let i = 0; i < dirsWithPostpatch.length; i++) {

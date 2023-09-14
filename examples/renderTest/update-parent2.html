@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Vue.js tree view example</title>
+    <style>
+      body {
+        font-family: Menlo, Consolas, monospace;
+        color: #444;
+      }
+      .item {
+        cursor: pointer;
+      }
+      .bold {
+        font-weight: bold;
+      }
+      ul {
+        padding-left: 1em;
+        line-height: 1.5em;
+        list-style-type: dot;
+      }
+    </style>
+    <script src="../../dist/vue.js"></script>
+  </head>
+  <body>
+
+    <!-- item template -->
+    <script type="text/x-template" id="list-template">
+     <ul>
+        <li v-for="(item, key) in list" :key="key">{{ item }}</li>
+     </ul>
+    </script>
+    <div id="app">
+      <button @click="handleAdd">add添加</button>
+      <list :list="list" />
+    </div>
+    <script src="update-parent.js"></script>
+    <script>
+      (function anonymous() {
+        with(this){return _c('div',{attrs:{"id":"app"}},[_c('button',{on:{"click":handleAdd}},[_v("add添加")]),_v(" "),_c('list',{attrs:{"list":list}})],1)}
+      })
+      
+      (function anonymous() {
+        with(this){return _c('ul',_l((list),function(item,key){return _c('li',{key:key},[_v(_s(item))])}),0)}
+      })
+    </script>
+  </body>
+</html>

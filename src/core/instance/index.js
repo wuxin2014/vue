@@ -14,10 +14,10 @@ function Vue (options) {
   this._init(options)
 }
 
-initMixin(Vue)
-stateMixin(Vue)
-eventsMixin(Vue)
-lifecycleMixin(Vue)
-renderMixin(Vue)
+initMixin(Vue) // 在Vue的prototype上定义_init方法
+stateMixin(Vue) // 在Vue的prototype上定义了$data,$props属性且是响应式的，$set,$delete，以及$watch方法
+eventsMixin(Vue) // 在Vue的prototype上定义了$on, $off, $once, $emit方法
+lifecycleMixin(Vue) // 在Vue的prototype上定义了_update, $destroy, $forceUpdate方法
+renderMixin(Vue) // 在Vue的prototype上定义了$nextTick, _render方法，之前的installRenderHelpers()，在Vue的prototype上定义了多种渲染帮助方法
 
 export default Vue
