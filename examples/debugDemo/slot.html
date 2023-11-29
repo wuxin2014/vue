@@ -2,40 +2,80 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Vue.js tree view example</title>
+    <title>slot-debugger</title>
     <style>
       body {
         font-family: Menlo, Consolas, monospace;
         color: #444;
       }
-      .item {
-        cursor: pointer;
-      }
-      .bold {
-        font-weight: bold;
-      }
-      ul {
-        padding-left: 1em;
-        line-height: 1.5em;
-        list-style-type: dot;
-      }
     </style>
     <script src="../../dist/vue.js"></script>
   </head>
   <body>
-
     <!-- item template -->
-    <script type="text/x-template" id="list-template">
-     <div>
-        <slot></slot>
-        <li v-for="(item, key) in list" :key="key">{{ item }}</li>
-     </div>
+    <script type="text/x-template" id="custom-comp">
+      <div style="font-size: 16px">
+        <header style="background-color: antiquewhite; padding: 10px;">
+          <slot name="header"></slot>
+        </header>
+        <main style="padding: 10px;">
+          <slot></slot>
+        </main>
+        <footer style="background-color: bisque; padding: 10px">
+          <slot name="footer"></slot>
+        </footer>
+      </div>
     </script>
+    <script>
+      const CustomComp = {
+        template: '#custom-comp',
+      }
+    </script>
+    <!-- App template (in DOM) -->
     <div id="app">
-      <list :list="list">
-        <div>{{name || 'slotTest'}}</div>
-      </list>
+      <div id="search">
+        <h1>普通插槽</h1>
+        <custom-comp>
+          <template #header>{{ title }}</template>
+          <p>{{name}}</p>
+          <template #footer>Footer</template>
+        </custom-comp>
+      </div>
     </div>
-    <script src="common.js"></script>
+    <script>
+      debugger
+      var app = new Vue({
+        el: '#app',
+        components: {
+          CustomComp
+        },
+        data()  {
+          return {
+            title: 'Title',
+            name: 'Hello World!'
+          }
+        }
+      })
+
+      // (function anonymous() {
+      //   with(this) {
+      //     return _c('div',{attrs:{"id":"app"}},[
+      //       _c('div',{attrs:{"id":"search"}},[
+      //         _c('h1',[_v("普通插槽")]),
+      //         _v(" "),
+      //         _c('custom-comp',{
+      //           scopedSlots:_u([
+      //             {key:"header",fn:function(){return [_v(_s(title))]},proxy:true},
+      //             {key:"footer",fn:function(){return [_v("Footer")]},proxy:true}
+      //           ])
+      //         },[
+      //           _v(" "),
+      //           _c('p',[_v(_s(name))])
+      //         ])
+      //       ],1)
+      //     ])
+      //   }
+      // })
+    </script>
   </body>
 </html>
