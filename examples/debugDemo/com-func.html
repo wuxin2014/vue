@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Vue.js tree view example</title>
+    <title>函数组件-debugger</title>
     <style>
       body {
         font-family: Menlo, Consolas, monospace;
@@ -28,6 +28,7 @@
       <user-list :users="list" @click="clickHandler"/>
     </div>
     <script>
+      debugger
       Vue.component('user-list', {
         functional: true,
         props: {
@@ -56,6 +57,17 @@
           }
         }
       })
+
+      // (function anonymous() {
+      //   with(this) {
+      //     return _c('div',{attrs:{"id":"app"}},[
+      //       _c('user-list',{attrs:{"users":list},on:{"click":clickHandler}})
+      //     ],1)
+      //   }
+      // })
+
+      // 子组件
+      
     </script>
   </body>
 </html>
