@@ -14,7 +14,7 @@ let uid = 0
 
 export function initMixin (Vue: Class<Component>) {
   Vue.prototype._init = function (options?: Object) {
-    const vm: Component = this
+    const vm: Component = this // 组件实例
     // a uid
     vm._uid = uid++
 
@@ -72,10 +72,12 @@ export function initMixin (Vue: Class<Component>) {
   }
 }
 
+// 初始化内部组件
 export function initInternalComponent (vm: Component, options: InternalComponentOptions) {
-  const opts = vm.$options = Object.create(vm.constructor.options) // vm.constructor 指向实例的构造函数，vm.constructor.options指向构造函数的静态属性
+  // vm.constructor 指向实例的构造函数，实例构造函数上挂载了静态属性，vm.constructor.options指向构造函数的静态属性，将其赋值给实例的$options
+  const opts = vm.$options = Object.create(vm.constructor.options)
   // doing this because it's faster than dynamic enumeration.
-  const parentVnode = options._parentVnode
+  const parentVnode = options._parentVnode // options._parentVnode组件Vnode
   opts.parent = options.parent
   opts._parentVnode = parentVnode
 
@@ -91,6 +93,7 @@ export function initInternalComponent (vm: Component, options: InternalComponent
   }
 }
 
+// 解析构造函数上的options
 export function resolveConstructorOptions (Ctor: Class<Component>) {
   let options = Ctor.options // 构造函数静态属性options
   if (Ctor.super) {

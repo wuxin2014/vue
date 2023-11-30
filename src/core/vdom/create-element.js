@@ -33,7 +33,8 @@ export function createElement (
   normalizationType: any,
   alwaysNormalize: boolean
 ): VNode | Array<VNode> {
-  // 兼容不传data的情况
+  debugger
+  // data为数组，说明children应该是undefined,所以需要处理下
   if (Array.isArray(data) || isPrimitive(data)) {
     normalizationType = children
     children = data
@@ -52,7 +53,6 @@ export function _createElement (
   children?: any,
   normalizationType?: number
 ): VNode | Array<VNode> {
-  debugger
   if (isDef(data) && isDef((data: any).__ob__)) {
     process.env.NODE_ENV !== 'production' && warn(
       `Avoid using observed data object as vnode data: ${JSON.stringify(data)}\n` +
@@ -111,7 +111,7 @@ export function _createElement (
         undefined, undefined, context
       )
     } else if ((!data || !data.pre) && isDef(Ctor = resolveAsset(context.$options, 'components', tag))) {
-      // component createComponent(Ctor, data, context, children, tag)
+      // 获取组件vnode createComponent(Ctor, data, context, children, tag)
       vnode = createComponent(Ctor, data, context, children, tag)
     } else {
       // unknown or unlisted namespaced elements

@@ -44,6 +44,7 @@ const componentVNodeHooks = {
       const mountedNode: any = vnode // work around flow
       componentVNodeHooks.prepatch(mountedNode, mountedNode)
     } else {
+      // 根据vnode创建组件实例
       const child = vnode.componentInstance = createComponentInstanceForVnode(
         vnode,
         activeInstance
@@ -144,7 +145,7 @@ export function createComponent (
     }
   }
 
-  data = data || {}  // 组件标签上的属性 { attrs, on, nativeOn, model, slot }
+  data = data || {}  // 组件标签上的属性 { attrs, on, nativeOn, model, slot, scopedSlots }
 
   // resolve constructor options in case global mixins are applied after
   // component constructor creation

@@ -22,7 +22,7 @@ export function initRender (vm: Component) {
   const options = vm.$options
   const parentVnode = vm.$vnode = options._parentVnode // the placeholder node in parent tree
   const renderContext = parentVnode && parentVnode.context // context指向父类的实例
-  vm.$slots = resolveSlots(options._renderChildren, renderContext) // 解析普通插槽的处理
+  vm.$slots = resolveSlots(options._renderChildren, renderContext) // 将options._renderChildren解析普通插槽的处理
   vm.$scopedSlots = emptyObject
   // bind the createElement fn to this instance
   // so that we get proper render context inside it.
@@ -38,6 +38,7 @@ export function initRender (vm: Component) {
   // they need to be reactive so that HOCs using them are always updated
   const parentData = parentVnode && parentVnode.data
 
+  // 在实例上定义$attrs,$listeners 属性
   /* istanbul ignore else */
   if (process.env.NODE_ENV !== 'production') {
     defineReactive(vm, '$attrs', parentData && parentData.attrs || emptyObject, () => {
@@ -70,13 +71,13 @@ export function renderMixin (Vue: Class<Component>) {
 
   Vue.prototype._render = function (): VNode {
     const vm: Component = this
-    // 注意render
     const { render, _parentVnode } = vm.$options
 
     if (_parentVnode) {
+      debugger
       vm.$scopedSlots = normalizeScopedSlots(
-        _parentVnode.data.scopedSlots, // 作用区插槽，parentVnode.data.scopedSlots不会为空
-        vm.$slots,
+        _parentVnode.data.scopedSlots, // 作用区插槽跟具名插槽编译后都会有scopedSlots属性，parentVnode.data.scopedSlots不会为空
+        vm.$slots, // 普通插槽
         vm.$scopedSlots
       )
     }

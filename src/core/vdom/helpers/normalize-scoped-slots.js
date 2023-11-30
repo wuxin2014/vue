@@ -6,8 +6,8 @@ import { emptyObject } from 'shared/util'
 import { isAsyncPlaceholder } from './is-async-placeholder'
 
 export function normalizeScopedSlots (
-  slots: { [key: string]: Function } | void,
-  normalSlots: { [key: string]: Array<VNode> },
+  slots: { [key: string]: Function } | void, // 具名插槽跟作用域插槽（据我理解的）
+  normalSlots: { [key: string]: Array<VNode> }, // 普通插槽
   prevSlots?: { [key: string]: Function } | void
 ): any {
   let res
@@ -75,6 +75,7 @@ function normalizeScopedSlot(normalSlots, key, fn) {
   // compiled as a scoped slot, render fn users would expect it to be present
   // on this.$slots because the usage is semantically a normal slot.
   if (fn.proxy) {
+    // 重点注意，作用域插槽跟普通插槽的 渲染时机
     Object.defineProperty(normalSlots, key, {
       get: normalized,
       enumerable: true,
@@ -84,6 +85,7 @@ function normalizeScopedSlot(normalSlots, key, fn) {
   return normalized
 }
 
+// 代理普通插槽
 function proxyNormalSlot(slots, key) {
   return () => slots[key]
 }

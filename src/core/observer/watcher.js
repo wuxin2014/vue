@@ -25,7 +25,7 @@ let uid = 0
  * This is used for both the $watch() api and directives.
  */
 export default class Watcher {
-  vm: Component;
+  vm: Component; // 组件实例
   expression: string;
   cb: Function;
   id: number;
@@ -52,7 +52,7 @@ export default class Watcher {
   ) {
     this.vm = vm
     if (isRenderWatcher) {
-      vm._watcher = this
+      vm._watcher = this // 实例上渲染watcher赋值
     }
     vm._watchers.push(this)
     // options
