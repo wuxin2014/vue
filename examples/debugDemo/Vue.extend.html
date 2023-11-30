@@ -1,43 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="utf-8">
-    <title>Vue-Directive</title>
+    <title>data-debugger</title>
     <style>
-        body {
-            font-family: Menlo, Consolas, monospace;
-            color: #444;
-        }
+      body {
+        font-family: Menlo, Consolas, monospace;
+        color: #444;
+      }
     </style>
-    <!-- Delete ".min" for console warnings in development -->
     <script src="../../dist/vue.js"></script>
-</head>
-
-<body>
+  </head>
+  <body>
+    <!-- App template (in DOM) -->
     <div id="app">
     </div>
     <script>
-        const ComContructor = Vue.extend({
-            template: '<p>{{firstName}} {{lastName}} aka {{alias}}</p>',
-            data: function () {
-                return {
-                    firstName: 'Walter',
-                    lastName: 'White',
-                    alias: 'Heisenberg'
-                }
-            }
-        })
-
-        debugger
-        const instance = new ComContructor({
-            data: { 
-                firstName: 'options', 
-            }
-        })
-        console.log('instance', instance)
-        // 主要注意选项合并
+      debugger
+      const ComContructor = Vue.extend({
+        template: '<p>{{firstName}} {{lastName}} aka {{alias}}</p>',
+        data() {
+          return {
+            firstName: 'Walter',
+            lastName: 'White',
+            alias: 'Heisenberg'
+          }
+        }
+      })
+      
+      const instance = new ComContructor({
+        data: { 
+          firstName: 'options',
+        }
+      })
+      console.log('instance', instance)
+      // 主要注意选项合并
     </script>
-</body>
-
+  </body>
 </html>

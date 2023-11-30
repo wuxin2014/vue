@@ -2,31 +2,36 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Vue.js tree view example</title>
+    <title>async-com debugger</title>
     <style>
       body {
         font-family: Menlo, Consolas, monospace;
         color: #444;
       }
-      .item {
-        cursor: pointer;
-      }
-      .bold {
-        font-weight: bold;
-      }
-      ul {
-        padding-left: 1em;
-        line-height: 1.5em;
-        list-style-type: dot;
-      }
     </style>
-    <!-- Delete ".min" for console warnings in development -->
     <script src="../../dist/vue.js"></script>
   </head>
   <body>
+    <!-- App template (in DOM) -->
     <div id="app">
       <async-com />
     </div>
-    <script src="com-async.js"></script>
+    <script>
+      Vue.component('async-com', function (resolve, reject) {
+        setTimeout(function () {
+          // 向 `resolve` 回调传递组件定义
+          resolve({
+            template: '<div>I am async!</div>'
+          })
+        }, 1000)
+      })
+      var app = new Vue({
+        el: '#app',
+        data: {
+          list: [1, 2, 3, 4, 5],
+          name: ''
+        },
+      })
+    </script>
   </body>
 </html>

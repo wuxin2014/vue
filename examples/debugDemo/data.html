@@ -1,46 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="utf-8">
-    <title>transition</title>
+    <title>data-debugger</title>
     <style>
-        body {
-            font-family: Menlo, Consolas, monospace;
-            color: #444;
-        }
+      body {
+        font-family: Menlo, Consolas, monospace;
+        color: #444;
+      }
     </style>
     <script src="../../dist/vue.js"></script>
-</head>
-
-<body>
+  </head>
+  <body>
+    <!-- App template (in DOM) -->
     <div id="app">
-        <div>{{ name }}-{{ age }}</div>
-        <button @click="handleClick">toggle</button>
+      <div>{{ name }}-{{ age }}</div>
+      <button @click="handleClick">toggle</button>
     </div>
     <script>
-        debugger
-        var app = new Vue({
-            el: '#app',
-            data: {
-                count: 1,
-                name: 'haha',
-                age: 1000
-            },
-            methods: {
-                handleClick() {
-                    // this.count++
-                    // console.log(this.count) // 主要是因为没有收集依赖
-                    this.name = this.name + '1'
-                    this.age = this.age + 1
-                }
-            }
-        })
+      var app = new Vue({
+        el: '#app',
+        data() {
+          return {
+            count: 1,
+            name: 'haha',
+            age: 1000
+          }
+        },
+        methods: {
+          handleClick() {
+            // this.count++
+            // console.log(this.count) // 主要是因为没有收集依赖
+            this.name = this.name + '1'
+            this.age = this.age + 1
+          }
+        }
+      })
 
-        (function anonymous() {
-            with(this){return _c('div',{attrs:{"id":"app"}},[_c('div',[_v(_s(name)+"-"+_s(age))]),_v(" "),_c('button',{on:{"click":handleClick}},[_v("toggle")])])}
-        })
+      // (function anonymous() {
+      //   with(this) {
+      //     return _c('div',{attrs:{"id":"app"}},[
+      //       _c('div',[_v(_s(name)+"-"+_s(age))]),
+      //       _v(" "),
+      //       _c('button',{on:{"click":handleClick}},[_v("toggle")])
+      //     ])
+      //   }
+      // })
     </script>
-</body>
-
+  </body>
 </html>

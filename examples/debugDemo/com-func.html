@@ -20,13 +20,42 @@
         list-style-type: dot;
       }
     </style>
-    <!-- Delete ".min" for console warnings in development -->
     <script src="../../dist/vue.js"></script>
   </head>
   <body>
+    <!-- App template (in DOM) -->
     <div id="app">
       <user-list :users="list" @click="clickHandler"/>
     </div>
-    <script src="com-func.js"></script>
+    <script>
+      Vue.component('user-list', {
+        functional: true,
+        props: {
+          users: { type: Array, default: () => []}
+        },
+        render(createElement, context) {
+          console.log('context===', context)
+          const children = context.props.users.map((item, idx) => {
+            return createElement('li', { attrs: { key: idx }, on: { click: (ev) => { context.listeners.click(item) }}}, [item])
+          })
+          return createElement('ul', children)
+        },
+      })
+
+      var app = new Vue({
+        el: '#app',
+        data() {
+          return {
+            list: [1, 2, 3, 4, 5],
+            name: ''
+          }
+        },
+        methods: {
+          clickHandler(name) {
+            alert(name)
+          }
+        }
+      })
+    </script>
   </body>
 </html>

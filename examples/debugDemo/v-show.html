@@ -1,43 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="utf-8">
-    <title>transition</title>
+    <title>v-show debugger</title>
     <style>
-        body {
-            font-family: Menlo, Consolas, monospace;
-            color: #444;
-        }
+      body {
+        font-family: Menlo, Consolas, monospace;
+        color: #444;
+      }
     </style>
     <script src="../../dist/vue.js"></script>
-</head>
-
-<body>
+  </head>
+  <body>
+    <!-- App template (in DOM) -->
     <div id="app">
-        <button @click="handleClick">toggle</button>
-        <div v-show="isShow">
-            haha
-        </div>
+      <button @click="handleClick">toggle</button>
+      <div v-show="isShow">haha</div>
     </div>
     <script>
-        debugger
-        var app = new Vue({
-            el: '#app',
-            data: {
-                isShow: false
-            },
-            methods: {
-                handleClick() {
-                    this.isShow = !this.isShow
-                }
-            }
-        })
+      debugger
+      var app = new Vue({
+        el: '#app',
+        data()  {
+          return {
+            isShow: false
+          }
+        },
+        methods: {
+          handleClick() {
+            this.isShow = !this.isShow
+          }
+        }
+      })
 
-        (function anonymous() {
-            with(this){return _c('div',{attrs:{"id":"app"}},[_c('button',{on:{"click":handleClick}},[_v("toggle")]),_v(" "),_c('div',{directives:[{name:"show",rawName:"v-show",value:(isShow),expression:"isShow"}]},[_v("\n            haha\n        ")])])}
-        })
+      // (function anonymous() {
+      //   with (this) {
+      //     return _c('div', { attrs: { "id": "app" } }, [
+      //       _c('button', { on: { "click": handleClick } }, [_v("toggle")]),
+      //       _v(" "),
+      //       _c('div', { directives: [{ name: "show", rawName: "v-show", value: (isShow), expression: "isShow" }] }, [_v("\n            haha\n        ")])
+      //     ])
+      //   }
+      // })
     </script>
-</body>
-
+  </body>
 </html>

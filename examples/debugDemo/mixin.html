@@ -10,18 +10,17 @@
       color: #444;
     }
   </style>
-  <!-- Delete ".min" for console warnings in development -->
   <script src="../../dist/vue.js"></script>
 </head>
 
 <body>
   <!-- item template -->
   <script type="text/x-template" id="custom-input-template">
-     <div>
-        <input v-model="name" />
-        <span @click="showAge">{{ age }}</span>
-     </div>
-    </script>
+    <div>
+      <input v-model="name" />
+      <span @click="showAge">{{ age }}</span>
+    </div>
+  </script>
   <div id="app">
     <custom-input :visible="visible" />
   </div>
@@ -39,7 +38,7 @@
           }
         }
 			},
-      data: function () {
+      data() {
         return {
           name: 'dd',
         }

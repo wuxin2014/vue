@@ -75,7 +75,7 @@ function normalizeScopedSlot(normalSlots, key, fn) {
   // compiled as a scoped slot, render fn users would expect it to be present
   // on this.$slots because the usage is semantically a normal slot.
   if (fn.proxy) {
-    // 重点注意，作用域插槽跟普通插槽的 渲染时机
+    // 重点注意，作用域插槽跟普通插槽的 渲染时机， 怎么定义后 normalSlots上数据已经被执行后的数据？？？
     Object.defineProperty(normalSlots, key, {
       get: normalized,
       enumerable: true,

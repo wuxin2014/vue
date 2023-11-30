@@ -1,70 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="utf-8">
-    <title>Vue-Directive</title>
+    <title>directive-debugger</title>
     <style>
-        body {
-            font-family: Menlo, Consolas, monospace;
-            color: #444;
-        }
+      body {
+        font-family: Menlo, Consolas, monospace;
+        color: #444;
+      }
     </style>
-    <!-- Delete ".min" for console warnings in development -->
     <script src="../../dist/vue.js"></script>
-</head>
-
-<body>
+  </head>
+  <body>
+    <!-- App template (in DOM) -->
     <div id="app">
-        <input v-model="name" v-focus />
+      <input v-model="name" v-focus />
     </div>
     <script>
-        // v-pin="200"
-        Vue.directive('pin', {
-            bind(el, binding, vnode) {
-                el.style.position = 'fixed'
-                el.style.top = binding.value + 'px'
-            }
-        })
-        // 动态指令 v-pin:[direction]="200"  direction:'left'
-        Vue.directive('pin', {
-            bind: function (el, binding, vnode) {
-                el.style.position = 'fixed'
-                var s = (binding.arg == 'left' ? 'left' : 'top')
-                el.style[s] = binding.value + 'px'
-            }
-        })
-        debugger
-        var app = new Vue({
-            el: '#app',
-            data() {
-                return { name: 'test' }
+      // v-pin="200"
+      Vue.directive('pin', {
+        bind(el, binding, vnode) {
+          el.style.position = 'fixed'
+          el.style.top = binding.value + 'px'
+        }
+      })
+      // 动态指令 v-pin:[direction]="200"  direction:'left'
+      Vue.directive('pin', {
+        bind: function (el, binding, vnode) {
+          el.style.position = 'fixed'
+          var s = (binding.arg == 'left' ? 'left' : 'top')
+          el.style[s] = binding.value + 'px'
+        }
+      })
+      var app = new Vue({
+        el: '#app',
+        data() {
+          return {
+            name: 'haha'
+          }
+        },
+        // 指令的定义
+        directives: {
+          focus: {
+            bind(el, binding, vnode, oldVnode) {},
+            inserted(el, binding, vnode, oldVnode) {
+              el.focus()
             },
-            // 指令的定义
-            directives: {
-                focus: {
-                    bind(el, binding, vnode, oldVnode) {},
-                    inserted(el, binding, vnode, oldVnode) {
-                        el.focus()
-                    },
-                    update(el, binding, vnode, oldVnode) {},
-                    componentUpdated(el, binding, vnode, oldVnode) {},
-                    unbind(el, binding, vnode, oldVnode) {}
-                }
-            },
-            methods: {
-                showAge() {
-                    console.log('====')
-                }
-            }
-        })
+            update(el, binding, vnode, oldVnode) {},
+            componentUpdated(el, binding, vnode, oldVnode) {},
+            unbind(el, binding, vnode, oldVnode) {}
+          }
+        },
+        methods: {
+          showAge() {
+            console.log('====')
+          }
+        }
+      })
 
-        console.log('app', app)
-
-        (function anonymous() {
-            with(this){return _c('div',{attrs:{"id":"app"}},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(name),expression:"name"},{name:"focus",rawName:"v-focus"}],domProps:{"value":(name)},on:{"input":function($event){if($event.target.composing)return;name=$event.target.value}}})])}
-        })
+      // (function anonymous() {
+      //   with(this){
+      //     return _c('div',{attrs:{"id":"app"}},[
+      //       _c('input',{
+      //         directives:[
+      //           {name:"model",rawName:"v-model",value:(name),expression:"name"},
+      //           {name:"focus",rawName:"v-focus"}
+      //         ],
+      //         domProps:{"value":(name)},
+      //         on:{
+      //           "input":function($event){
+      //             if($event.target.composing)return;
+      //             name=$event.target.value
+      //           }
+      //         }
+      //       })
+      //     ])
+      //   }
+      // })
     </script>
-</body>
-
+  </body>
 </html>

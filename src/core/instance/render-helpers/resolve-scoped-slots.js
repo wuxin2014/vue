@@ -1,5 +1,10 @@
 /* @flow */
 
+// _u([
+//   {key:"header",fn:function(){return [_v(_s(title))]},proxy:true},
+//   {key:"footer",fn:function(){return [_v("Footer")]},proxy:true}
+// ])
+// 上面代码测试案例
 export function resolveScopedSlots (
   fns: ScopedSlotsData, // see flow/vnode
   res?: Object,
@@ -7,6 +12,7 @@ export function resolveScopedSlots (
   hasDynamicKeys?: boolean,
   contentHashKey?: number
 ): { [key: string]: Function, $stable: boolean } {
+  debugger
   res = res || { $stable: !hasDynamicKeys }
   for (let i = 0; i < fns.length; i++) {
     const slot = fns[i]

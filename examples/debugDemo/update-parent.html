@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Vue.js tree view example</title>
+    <title>parent-update debugger</title>
     <style>
       body {
         font-family: Menlo, Consolas, monospace;
@@ -23,18 +23,44 @@
     <script src="../../dist/vue.js"></script>
   </head>
   <body>
-
     <!-- item template -->
     <script type="text/x-template" id="list-template">
      <ul>
         <li v-for="(item, key) in list" :key="key">{{ item }}</li>
      </ul>
     </script>
+    <!-- App template (in DOM) -->
     <div id="app">
       <input v-model="name" />
       <list :list="list" />
       <div>https://v2.template-explorer.vuejs.org/#</div>
     </div>
-    <script src="update-parent.js"></script>
+    <script>
+      Vue.component('list', {
+        template: '#list-template',
+        props: {
+          list: { 
+            type: Array,
+            default: () => []
+          }
+        }
+      })
+
+      debugger
+      var app = new Vue({
+        el: '#app',
+        data() {
+          return {
+            list: [1, 2, 3, 4, 5],
+            name: ''
+          }
+        },
+        methods: {
+          handleAdd() {
+            this.list.push('test')
+          }
+        }
+      })
+    </script>
   </body>
 </html>
