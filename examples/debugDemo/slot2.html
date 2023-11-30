@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>具名插槽slot-debugger</title>
+    <style>
+      body {
+        font-family: Menlo, Consolas, monospace;
+        color: #444;
+      }
+    </style>
+    <script src="../../dist/vue.js"></script>
+  </head>
+  <body>
+    <!-- item template -->
+    <script type="text/x-template" id="custom-comp">
+      <div style="font-size: 16px">
+        <header style="background-color: antiquewhite; padding: 10px;">
+          <slot name="header"></slot>
+        </header>
+        <main style="padding: 10px;">
+          <slot></slot>
+        </main>
+        <footer style="background-color: bisque; padding: 10px">
+          <slot name="footer"></slot>
+        </footer>
+      </div>
+    </script>
+    <script>
+      const CustomComp = {
+        template: '#custom-comp',
+      }
+    </script>
+    <!-- App template (in DOM) -->
+    <!-- <p #default>{{name}}</p> -->
+    <div id="app">
+      <div id="search">
+        <h1>普通插槽</h1>
+        <custom-comp>
+          <template #header>{{ title }}</template>
+          <template #default>{{name}}</template>
+          <template #footer>Footer</template>
+        </custom-comp>
+      </div>
+    </div>
+    <script>
+      debugger
+      var app = new Vue({
+        el: '#app',
+        components: {
+          CustomComp
+        },
+        data()  {
+          return {
+            title: 'Title',
+            name: 'Hello World!'
+          }
+        }
+      })
+
+      // (function anonymous() {
+      //   with(this){
+      //     return _c('div',{attrs:{"id":"app"}},[
+      //       _c('div',{attrs:{"id":"search"}},[
+      //         _c('h1',[_v("普通插槽")]),
+      //         _v(" "),
+      //         _c('custom-comp',{scopedSlots:_u([
+      //           {key:"header",fn:function(){return [_v(_s(title))]},proxy:true},
+      //           {key:"default",fn:function(){return [_v(_s(name))]},proxy:true},
+      //           {key:"footer",fn:function(){return [_v("Footer")]},proxy:true}
+      //         ])})
+      //       ],1)
+      //     ])
+      //   }
+      // })
+    </script>
+  </body>
+</html>

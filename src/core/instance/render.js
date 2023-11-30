@@ -72,7 +72,7 @@ export function renderMixin (Vue: Class<Component>) {
   Vue.prototype._render = function (): VNode {
     const vm: Component = this
     const { render, _parentVnode } = vm.$options
-
+    debugger
     if (_parentVnode) {
       debugger
       vm.$scopedSlots = normalizeScopedSlots(

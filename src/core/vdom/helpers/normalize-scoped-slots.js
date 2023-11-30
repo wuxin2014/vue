@@ -32,7 +32,7 @@ export function normalizeScopedSlots (
     return prevSlots
   } else {
     res = {}
-    // 首次渲染处理作用域插槽
+    // 首次渲染处理作用域插槽或具名插槽
     for (const key in slots) {
       if (slots[key] && key[0] !== '$') {
         res[key] = normalizeScopedSlot(normalSlots, key, slots[key])
@@ -42,6 +42,7 @@ export function normalizeScopedSlots (
   // 处理普通插槽normalSlots
   // expose normal slots on scopedSlots
   for (const key in normalSlots) {
+    console.log('===1', key, res)
     if (!(key in res)) {
       res[key] = proxyNormalSlot(normalSlots, key)
     }
