@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>async-com debugger</title>
+    <title>异步组件-debugger</title>
     <style>
       body {
         font-family: Menlo, Consolas, monospace;
@@ -14,16 +14,18 @@
   <body>
     <!-- App template (in DOM) -->
     <div id="app">
+      <h1>Title</h1>
       <async-com />
     </div>
     <script>
+      debugger
       Vue.component('async-com', function (resolve, reject) {
         setTimeout(function () {
           // 向 `resolve` 回调传递组件定义
           resolve({
-            template: '<div>I am async!</div>'
+            template: '<div>I am async component!</div>'
           })
-        }, 1000)
+        }, 2000)
       })
       var app = new Vue({
         el: '#app',
@@ -32,6 +34,16 @@
           name: ''
         },
       })
+
+      // (function anonymous() {
+      //   with(this){
+      //     return _c('div',{attrs:{"id":"app"}},[
+      //       _c('h1',[_v("Title")]),
+      //       _v(" "),
+      //       _c('async-com')
+      //     ],1)
+      //   }
+      // })
     </script>
   </body>
 </html>
