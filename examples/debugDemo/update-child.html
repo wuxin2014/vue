@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Vue.js tree view example</title>
+    <title>子组件内部更新-debugger</title>
     <style>
       body {
         font-family: Menlo, Consolas, monospace;
@@ -31,6 +31,7 @@
     </script>
     <!-- App template (in DOM) -->
     <div id="app">
+      <p>子组件内部更新，父组件不会更新</p>
       <custom-input />
     </div>
     <script>

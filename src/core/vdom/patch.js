@@ -546,8 +546,9 @@ export function createPatchFunction (backend) {
 
     let i
     const data = vnode.data
+    // 组件更新时会走组件prepatch钩子函数
     if (isDef(data) && isDef(i = data.hook) && isDef(i = i.prepatch)) {
-      i(oldVnode, vnode) // 组件更新时走的钩子函数prepatch()
+      i(oldVnode, vnode)
     }
 
     const oldCh = oldVnode.children

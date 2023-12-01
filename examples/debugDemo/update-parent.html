@@ -32,8 +32,8 @@
     <!-- App template (in DOM) -->
     <div id="app">
       <input v-model="name" />
-      <list :list="list" />
-      <div>https://v2.template-explorer.vuejs.org/#</div>
+      <list :list="list"></list>
+      <div>文本标签</div>
     </div>
     <script>
       Vue.component('list', {
@@ -61,6 +61,29 @@
           }
         }
       })
+
+      // (function anonymous() {
+      //   with(this){
+      //     return _c('div',{attrs:{"id":"app"}},[
+      //       _c('input',{
+      //         directives:[{name:"model",rawName:"v-model",value:(name),expression:"name"}],
+      //         domProps:{"value":(name)},
+      //         on:{
+      //           "input":function($event){
+      //             if($event.target.composing)return;
+      //             name=$event.target.value
+      //           }
+      //         }
+      //       }),
+      //       _v(" "),
+      //       _c('list',{attrs:{"list":list}}),
+      //       _v(" "),
+      //       _c('div',[_v("文本标签")])
+      //     ],1)
+      //   }
+      // })
+
+      // 如果子组件依赖父组件定义的响应式数据A，但是该响应式数据A并未更改， 而是更改其他的数据，这个时候并不会走子组件的Watcher run函数
     </script>
   </body>
 </html>

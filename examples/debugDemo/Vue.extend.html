@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>data-debugger</title>
+    <title>组件手动挂载-debugger</title>
     <style>
       body {
         font-family: Menlo, Consolas, monospace;
@@ -18,23 +18,24 @@
     <script>
       debugger
       const ComContructor = Vue.extend({
-        template: '<p>{{firstName}} {{lastName}} aka {{alias}}</p>',
+        template: '<p>{{firstName}}-{{alias}}-{{lastName}}</p>',
         data() {
           return {
-            firstName: 'Walter',
-            lastName: 'White',
-            alias: 'Heisenberg'
+            firstName: '风',
+            lastName: '夜归人',
+            alias: '雪'
           }
         }
       })
-      
+      // 主要注意选项合并
       const instance = new ComContructor({
         data: { 
           firstName: 'options',
         }
       })
       console.log('instance', instance)
-      // 主要注意选项合并
+      // 手动挂载
+      instance.$mount('#app')
     </script>
   </body>
 </html>

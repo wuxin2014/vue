@@ -17,7 +17,7 @@ function updateDOMProps (oldVnode: VNodeWithData, vnode: VNodeWithData) {
   if (isDef(props.__ob__)) {
     props = vnode.data.domProps = extend({}, props)
   }
-
+  // 循环旧属性对象，对于不存在于新属性对象的key,值赋值为空
   for (key in oldProps) {
     if (!(key in props)) {
       elm[key] = ''
