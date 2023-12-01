@@ -69,10 +69,7 @@
         v-bind:key="tab"
         v-bind:class="['tab-button', { active: currentTab === tab }]"
         v-on:click="currentTab = tab"
-      >
-        {{ tab }}
-      </button>
-
+      >{{ tab }}</button>
       <keep-alive>
         <component v-bind:is="currentTabComponent" class="tab"></component>
       </keep-alive>
@@ -112,9 +109,7 @@
                 v-bind:key="post.id"
                 v-bind:class="{ selected: post === selectedPost }"
                 v-on:click="selectedPost = post"
-              >
-                {{ post.title }}
-              </li>
+              >{{ post.title }}</li>
             </ul>
             <div class="selected-post-container">
               <div
@@ -124,9 +119,7 @@
                 <h3>{{ selectedPost.title }}</h3>
                 <div v-html="selectedPost.content"></div>
               </div>
-              <strong v-else>
-                Click on a blog title to the left to view it.
-              </strong>
+              <strong v-else>Click on a blog title to the left to view it.</strong>
             </div>
           </div>
         `
@@ -162,7 +155,7 @@
       //               currentTab = tab
       //             }
       //           }
-      //         },[_v("\n        "+_s(tab)+"\n      ")])
+      //         },[_v(_s(tab))])
       //       }),
       //       _v(" "),
       //       _c('keep-alive',[_c(currentTabComponent,{tag:"component",staticClass:"tab"})],1)

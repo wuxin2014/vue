@@ -103,15 +103,18 @@
        * v-on:leave-cancelled="leaveCancelled"
        * 
        */
-      (function anonymous() {
-        with(this){
-          return _c('div',{attrs:{"id":"app"}},[
-            _c('button',{on:{"click":handleClick}},[_v("toggle")]),
-            _v(" "),
-            _c('transition',{attrs:{"name":"fade","duration":1000}},[(isShow)?_c('div',[_v("haha, 在进入/离开的过渡中，会有 6 个 class 切换。")]):_e()])
-          ],1)
-        }
-      })
+      // (function anonymous() {
+      //   with(this){
+      //     return _c('div',{attrs:{"id":"app"}},[
+      //       _c('button',{on:{"click":handleClick}},[_v("toggle")]),
+      //       _v(" "),
+      //       _c('transition',{attrs:{"name":"fade","duration":1000}},[(isShow)?_c('div',[_v("haha, 在进入/离开的过渡中，会有 6 个 class 切换。")]):_e()])
+      //     ],1)
+      //   }
+      // })
+
+      // 由于isShow定义为false, children vnode是_e => createEmptyVNode()生成的, 在处理普通插槽时会被过滤掉
+      // 第一渲染时生成vnode为undefined, 后面处理给了一个默认vnode
     </script>
   </body>
 </html>
