@@ -123,6 +123,7 @@ export function createPatchFunction (backend) {
 
   let creatingElmInVPre = 0
 
+  // 根据vnode初次生成dom会走这里
   function createElm (
     vnode,
     insertedVnodeQueue,
@@ -234,7 +235,7 @@ export function createPatchFunction (backend) {
   }
 
   function initComponent (vnode, insertedVnodeQueue) {
-    // todo vnode.data.pendingInsert在哪里赋的值
+    // todo vnode.data.pendingInsert在哪里赋的值 invokeInsertHook函数中
     if (isDef(vnode.data.pendingInsert)) {
       insertedVnodeQueue.push.apply(insertedVnodeQueue, vnode.data.pendingInsert)
       vnode.data.pendingInsert = null
@@ -305,7 +306,9 @@ export function createPatchFunction (backend) {
     }
     return isDef(vnode.tag)
   }
-  // 执行创建各类别钩子
+  // 执行创建各类别钩子 cbs.create 数组形式存储的钩子函数有: 
+  // updateAttrs(oldVnode, vnode)，updateClass(oldVnode, vnode)，updateDOMListeners(oldVnode, vnode)，updateDOMProps(oldVnode, vnode)
+  // updateStyle(oldVnode, vnode)，_enter(_, vnode)，create(_, vnode)，updateDirectives(oldVnode, vnode)
   function invokeCreateHooks (vnode, insertedVnodeQueue) {
     for (let i = 0; i < cbs.create.length; ++i) {
       cbs.create[i](emptyNode, vnode)
@@ -555,7 +558,9 @@ export function createPatchFunction (backend) {
     const ch = vnode.children
     // 有data属性情况下且vnode.tag存在
     if (isDef(data) && isPatchable(vnode)) {
-      // update: class,style,ref,domlisterner,domprops, directive(往data.hook中注入postpatch)
+      // cbs.update数组中有以下钩子函数：
+      // updateAttrs(oldVnode, vnode), updateClass(oldVnode, vnode), updateDOMListeners(oldVnode, vnode), updateDOMProps(oldVnode, vnode),
+      // updateStyle(oldVnode, vnode), update(oldVnode, vnode), updateDirectives(oldVnode, vnode)=>(往data.hook中注入postpatch)
       for (i = 0; i < cbs.update.length; ++i) cbs.update[i](oldVnode, vnode)
       // data.hook什么情况下会有update方法（指令）
       if (isDef(i = data.hook) && isDef(i = i.update)) i(oldVnode, vnode)
@@ -588,7 +593,7 @@ export function createPatchFunction (backend) {
     // delay insert hooks for component root nodes, invoke them after the
     // element is really inserted
     if (isTrue(initial) && isDef(vnode.parent)) {
-      vnode.parent.data.pendingInsert = queue  // 注意这里的赋值 vnode.parent => 组件vnode
+      vnode.parent.data.pendingInsert = queue  // 注意这里的赋值 vnode.parent 指向 组件vnode
     } else {
       for (let i = 0; i < queue.length; ++i) {
         queue[i].data.hook.insert(queue[i])  // 会执行组件mounted生命周期
@@ -709,22 +714,23 @@ export function createPatchFunction (backend) {
   }
 
   return function patch (oldVnode, vnode, hydrating, removeOnly) {
+    debugger
     if (isUndef(vnode)) {
       if (isDef(oldVnode)) invokeDestroyHook(oldVnode)
       return
     }
-    debugger
+    
     let isInitialPatch = false
     const insertedVnodeQueue = []
 
     if (isUndef(oldVnode)) {
       // empty mount (likely as component), create new root element
-      isInitialPatch = true
+      isInitialPatch = true // 组件首次渲染创建元素 注意isInitialPatch的赋值
       createElm(vnode, insertedVnodeQueue)
     } else {
       const isRealElement = isDef(oldVnode.nodeType)
       if (!isRealElement && sameVnode(oldVnode, vnode)) {
-        // patch existing root node
+        // patch existing root node 更新逻辑
         patchVnode(oldVnode, vnode, insertedVnodeQueue, null, null, removeOnly)
       } else {
         if (isRealElement) {
@@ -758,7 +764,7 @@ export function createPatchFunction (backend) {
         const oldElm = oldVnode.elm // 旧的节点元素
         const parentElm = nodeOps.parentNode(oldElm) // 找其父节点元素 => 应该是body元素
 
-        // create new node
+        // create new node 首次渲染生成dom
         createElm(
           vnode,
           insertedVnodeQueue,

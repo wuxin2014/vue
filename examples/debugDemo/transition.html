@@ -1,121 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="utf-8">
-    <title>transition</title>
+    <title>transition-debugger</title>
     <style>
-        body {
-            font-family: Menlo, Consolas, monospace;
-            color: #444;
-        }
-        /* CSS 过渡start */
-        .fade-enter-active, .fade-leave-active {
-            transition: opacity .5s;
-        }
-        .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-            opacity: 0;
-        }
+      body {
+        font-family: Menlo, Consolas, monospace;
+        color: #444;
+      }
+      /* CSS 过渡start */
+      .fade-enter-active, .fade-leave-active {
+        transition: opacity .5s;
+      }
+      .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+        opacity: 0;
+      }
 
-        /* 可以设置不同的进入和离开动画 */
-        /* 设置持续时间和动画函数 */
-        .slide-fade-enter-active {
-            transition: all .3s ease;
-        }
-        .slide-fade-leave-active {
-            transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-        }
-        .slide-fade-enter, .slide-fade-leave-to
-            /* .slide-fade-leave-active for below version 2.1.8 */ {
-            transform: translateX(10px);
-            opacity: 0;
-        }
-        /* CSS 过渡end */
+      /* 可以设置不同的进入和离开动画 */
+      /* 设置持续时间和动画函数 */
+      .slide-fade-enter-active {
+        transition: all .3s ease;
+      }
+      .slide-fade-leave-active {
+        transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+      }
+      .slide-fade-enter, .slide-fade-leave-to
+        /* .slide-fade-leave-active for below version 2.1.8 */ {
+        transform: translateX(10px);
+        opacity: 0;
+      }
+      /* CSS 过渡end */
 
-        /* CSS 动画start */
-        .bounce-enter-active {
-            animation: bounce-in .5s;
+      /* CSS 动画start */
+      .bounce-enter-active {
+        animation: bounce-in .5s;
+      }
+      .bounce-leave-active {
+        animation: bounce-in .5s reverse;
+      }
+      @keyframes bounce-in {
+        0% {
+          transform: scale(0);
         }
-        .bounce-leave-active {
-            animation: bounce-in .5s reverse;
+        50% {
+          transform: scale(1.5);
         }
-        @keyframes bounce-in {
-            0% {
-                transform: scale(0);
-            }
-            50% {
-                transform: scale(1.5);
-            }
-            100% {
-                transform: scale(1);
-            }
+        100% {
+          transform: scale(1);
         }
+      }
     </style>
     <script src="../../dist/vue.js"></script>
-</head>
-
-<body>
+  </head>
+  <body>
+    <!-- App template (in DOM) -->
     <div id="app">
-        <button @click="handleClick">toggle</button>
-        <transition name="fade" :duration="1000">
-            <div v-if="isShow">
-                haha, 在进入/离开的过渡中，会有 6 个 class 切换。
-            </div>
-        </transition>
+      <button @click="handleClick">toggle</button>
+      <transition name="fade" :duration="1000">
+        <div v-if="isShow">haha, 在进入/离开的过渡中，会有 6 个 class 切换。</div>
+      </transition>
     </div>
     <script>
-        /**
-         * transition组件
-         * 
-         * 在进入/离开的过渡中，会有 6 个 class 切换:  v-enter, v-enter-active, v-enter-to, v-leave, v-leave-active, v-leave-to
-         * 如果你使用一个没有名字的 <transition>，则 v- 是这些类名的默认前缀。
-         * 如果你使用了 <transition name="my-transition">，那么 v-enter 会替换为 my-transition-enter。
-         * v-enter-active 和 v-leave-active 可以控制进入/离开过渡的不同的缓和曲线
-         * 
-         * css: 推荐对于仅使用 JavaScript 过渡的元素添加 v-bind:css="false"，Vue 会跳过 CSS 的检测。这也可以避免过渡过程中 CSS 的影响。
-         * mode: in-out, out-in
-         * duration: 显性过度时间如duration="{ enter: 500, leave: 800 }"， :duration="1000"
-         * type: 设置 animation 或 transition 来明确声明你需要 Vue 监听的类型。
-         * 
-         * 自定义过渡的类名
-         * enter-class、enter-active-class、enter-to-class (2.1.8+)、leave-class、leave-active-class、leave-to-class (2.1.8+)
-         * 
-         * JavaScript 钩子
-         * 可以在 attribute 中声明 JavaScript 钩子
-         * v-on:before-enter="beforeEnter"
-         * v-on:enter="enter"
-         * v-on:after-enter="afterEnter"
-         * v-on:enter-cancelled="enterCancelled"
-         * v-on:before-leave="beforeLeave"
-         * v-on:leave="leave"
-         * v-on:after-leave="afterLeave"
-         * v-on:leave-cancelled="leaveCancelled"
-         * 
-         */ 
-        debugger
-        var app = new Vue({
-            el: '#app',
-            data: {
-                isShow: false
-            },
-            methods: {
-                handleClick() {
-                    this.isShow = !this.isShow
-                }
-            }
-        })
+      var app = new Vue({
+        el: '#app',
+        data() {
+          return {
+            isShow: false
+          }
+        },
+        methods: {
+          handleClick() {
+            this.isShow = !this.isShow
+          }
+        }
+      })
 
-        (function anonymous() {
-            with(this){return _c('div',{attrs:{"id":"app"}},[_c('button',{on:{"click":handleClick}},[_v("toggle")]),_v(" "),
-            _c('transition',{attrs:{"name":"fade"}},[(isShow)?_c('div',[_v("\n                haha, 在进入/离开的过渡中，会有 6 个 class 切换。\n            ")]):_e()])],1)}
-        })
-
-
-        (function anonymous() {
-            with(this){return _c('div',{attrs:{"id":"app"}},[_c('button',{on:{"click":handleClick}},[_v("toggle")]),_v(" "),
-            _c('transition',[_c('div',{directives:[{name:"show",rawName:"v-show",value:(isShow),expression:"isShow"}]},[_v("\n                haha\n            ")])])],1)}
-        })
+      /**
+       * transition组件
+       * 
+       * 在进入/离开的过渡中，会有 6 个 class 切换:  v-enter, v-enter-active, v-enter-to, v-leave, v-leave-active, v-leave-to
+       * 如果你使用一个没有名字的 <transition>，则 v- 是这些类名的默认前缀。
+       * 如果你使用了 <transition name="my-transition">，那么 v-enter 会替换为 my-transition-enter。
+       * v-enter-active 和 v-leave-active 可以控制进入/离开过渡的不同的缓和曲线
+       * 
+       * css: 推荐对于仅使用 JavaScript 过渡的元素添加 v-bind:css="false"，Vue 会跳过 CSS 的检测。这也可以避免过渡过程中 CSS 的影响。
+       * mode: in-out, out-in
+       * duration: 显性过度时间如duration="{ enter: 500, leave: 800 }"， :duration="1000"
+       * type: 设置 animation 或 transition 来明确声明你需要 Vue 监听的类型。
+       * 
+       * 自定义过渡的类名
+       * enter-class、enter-active-class、enter-to-class (2.1.8+)、leave-class、leave-active-class、leave-to-class (2.1.8+)
+       * 
+       * JavaScript 钩子
+       * 可以在 attribute 中声明 JavaScript 钩子
+       * v-on:before-enter="beforeEnter"
+       * v-on:enter="enter"
+       * v-on:after-enter="afterEnter"
+       * v-on:enter-cancelled="enterCancelled"
+       * v-on:before-leave="beforeLeave"
+       * v-on:leave="leave"
+       * v-on:after-leave="afterLeave"
+       * v-on:leave-cancelled="leaveCancelled"
+       * 
+       */
+      (function anonymous() {
+        with(this){
+          return _c('div',{attrs:{"id":"app"}},[
+            _c('button',{on:{"click":handleClick}},[_v("toggle")]),
+            _v(" "),
+            _c('transition',{attrs:{"name":"fade","duration":1000}},[(isShow)?_c('div',[_v("haha, 在进入/离开的过渡中，会有 6 个 class 切换。")]):_e()])
+          ],1)
+        }
+      })
     </script>
-</body>
-
+  </body>
 </html>
