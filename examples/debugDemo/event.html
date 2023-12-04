@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+<script src="../../dist/vue.js"></script>
+<div id="app">
+  <com-a @click="handleComClick"></com-a>
+  <div v-for="item in arr" :key="item" @click="handleClick(item)">{{ item }}</div>
+</div>
+<script>
+  const vm = new Vue({
+    el: '#app',
+    components: {
+      comA: {
+        template: `<div>内部组件</div>`
+      }
+    },
+    data() {
+      return { arr: [1, 2, 3, 4]}
+    },
+    methods: {
+      handleClick(a) {
+        // 原生元素事件绑定是通过addEventListener
+        console.log('handleClick', a)
+      },
+      handleComClick() {
+        console.log('handleComClick')
+      }
+    }
+  })
+</script>
+</body>
+
+</html>

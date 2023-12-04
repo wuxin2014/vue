@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<div id="app">
+  <h1>测试$set</h1>
+  <div v-for="(value, key) in info" :key="key">{{ key }} : {{ value }}</div>
+  <button @click="handleClick">增加info的属性</button>
+</div>
+<script src="../../dist/vue.js"></script>
+<script>
+  const vm = new Vue({
+    el: '#app',
+    data() {
+      return {
+        name: 'hello',
+        age: 20,
+        info: {a: 10, b: 11, c: 16},
+      }
+    },
+    methods: {
+      handleClick() {
+        debugger
+        this.$set(this.info, 'd', 33)
+      }
+    }
+  });
+</script>
+</body>
+</html>

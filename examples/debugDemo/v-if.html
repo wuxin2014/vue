@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+<script src="../../dist/vue.js"></script>
+<div id="app">
+  <div v-if="isShow">{{ isShow }}</div>
+  <button @click="handleClick">v-if测试</button>
+</div>
+<script>
+  // updateChildren中第一个节点4种对比都不成立，走第五种情况
+  const vm = new Vue({
+    el: '#app',
+    data() {
+      return {
+        isShow: false
+      }
+    },
+    methods: {
+      handleClick() {
+        this.isShow = !this.isShow
+      }
+    }
+  })
+  // _e => createEmptyVNode
+  // (function anonymous() {
+  //   with (this) {
+  //     return _c('div', {attrs: {"id": "app"}}, [
+  //       (isShow) ? _c('div', [_v(_s(isShow))]) : _e(),
+  //       _v(" "),
+  //       _c('button', {on: {"click": handleClick}}, [_v("v-if测试")])
+  //     ])
+  //   }
+  // })
+</script>
+</body>
+
+</html>

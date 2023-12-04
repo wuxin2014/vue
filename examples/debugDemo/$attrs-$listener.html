@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+<script src="../../dist/vue.js"></script>
+<div id="app">
+  <com-a v-bind="{name, age, sex}" v-on="{changeName, changeSex}"></com-a>
+</div>
+<script>
+  new Vue({
+    el: '#app',
+    components: {
+      comA: {
+        props: {
+          name: {
+            type: String,
+            default: ''
+          }
+        },
+        template: `<div>
+          <div>children</div>
+          <com-b v-bind="$attrs" v-on="$listeners"></com-b>
+        </div>`,
+        components: {
+          comB: {
+            template: `<div>{{ foo }} {{ this.$attrs }}</div>`,
+          }
+        }
+      }
+    },
+    data() {
+      return {
+        name: 'hahatext',
+        age: '19',
+        sex: '1'
+      }
+    },
+    methods: {
+      changeName() {
+
+      },
+      changeSex() {
+
+      }
+    }
+  })
+  /*(function anonymous() {
+    with (this) {
+      return _c('div', {attrs: {"id": "app"}}, [_c('com-a', {attrs: {"name": name, "b": b, "c": c}})], 1)
+    }
+  })*/
+  /*(function anonymous() {
+    with (this) {
+      return _c('div', {attrs: {"id": "app"}}, [_c('com-a', _g(_b({}, 'com-a', {name, age, sex}, false), {
+        changeName,
+        changeSex
+      }))], 1)
+    }
+  })*/
+</script>
+</body>
+
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script src="../../dist/vue.js">
+</script>
+<div id="app">
+  <h3>原生元素v-model 指令模式 input事件注意$event.target.composing。
+    compositionstart、compositionupdate、compositionend组成的复合事件。会在输入法编辑器输入时触发</h3>
+  <input type="text" v-model="msg">
+  <h3>原生元素自定义事件 基于addEventListener</h3>
+  <input type="text" :value="title" @input="change">
+</div>
+<script>
+  let vm = new Vue({
+    el: '#app',
+    data() {
+      return {msg: 'hello', title: 'zf'}
+    },
+    methods: {
+      onInput() {
+        console.log('onInput')
+      },
+      change(e) {
+        this.msg = e.target.value
+      }
+    }
+  })
+  /**
+   * 
+   * 
+   * vue通过v-model，@input, @v-model.lazy几种输入框数据更新方式的区别
+   * 在使用v-model时，如果用中文输入法输入中文，一般在没有选定词组前，也就在拼音阶段，Vue是不会更新数据的，当敲下汉字时才会触发更新。
+   * 如果希望总是实时更新，可以用@input来代替v-model.
+   * v-model.lazy修饰符，会转变为在change事件中同步，输入内容并不是实时改变，而是在失去焦点和按回车时才会更新
+   */
+  /*with(this){
+    return _c(
+      'div',
+      {attrs:{"id":"app"}},
+      [_c(
+        'input',
+        {
+          directives:[{name:"model",rawName:"v-model",value:(msg),expression:"msg"}],
+          attrs:{"type":"text"},
+          domProps:{"value":(msg)},
+          on: {
+            "input":function($event){
+              // 是否还在输入中
+              if($event.target.composing)
+                return;
+              msg = $event.target.value
+            }
+          }
+        }),
+      ]
+    )
+  }*/
+</script>
+</body>
+</html>

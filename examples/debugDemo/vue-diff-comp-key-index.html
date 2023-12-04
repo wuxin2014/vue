@@ -1,0 +1,53 @@
+<html>
+  <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  </head>
+<body>
+  <div id='app'>
+    <item
+      v-for="(item,index) in list"
+      :key="index"
+      :name="item.name"
+    >
+    </item>
+    <button @click="handleReserved">反转</button>
+  </div>
+</body>
+<script src="../../dist/vue.js"></script>
+<script>
+  debugger
+  var vm = new Vue({
+    el:'#app',
+    components: {
+      item: {
+        name: 'Item',
+        props: ['name'],
+        template: `<div>{{ name }}</div>`
+      }
+    },
+    data:{
+      list:[
+        {id:1, name:'张三'},
+        {id:2, name:'李四'},
+        {id:3, name:'王五'},
+      ],
+    },
+    methods:{
+      handleReserved(){
+        this.list.reverse()
+      }
+    }
+  });
+
+  // (function anonymous() {
+  //   with (this) {
+  //     return _c('div', {attrs: {"id": "app"}}, [
+  //       _l((list), function (item, index) {
+  //         return _c('item', {key: index, attrs: {"name": item.name}})
+  //       }),
+  //       _v(" "),
+  //       _c('button', {on: {"click": handleReserved}}, [_v("反转")])
+  //     ], 2)
+  //   }
+  // })
+</script>

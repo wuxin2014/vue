@@ -21,7 +21,6 @@ export function initAssetRegisters (Vue: GlobalAPI) {
           validateComponentName(id)
         }
         if (type === 'component' && isPlainObject(definition)) {
-          debugger
           definition.name = definition.name || id
           definition = this.options._base.extend(definition) // 资源组件调用了Vue的静态方法extend进行扩展
         }

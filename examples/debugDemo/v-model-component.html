@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script src="../../dist/vue.js"></script>
+<div id="app">
+  <my v-model="title"></my>
+</div>
+<script>
+ 
+  let vm = new Vue({
+    el: '#app',
+    data() {
+      return { msg: 'hello', title: 'vue Study' }
+    },
+    components: {
+      my: { // vant v-model  :value + change
+        model: {
+          prop: 'title',
+          event: 'change'
+        },
+        props: {
+          title: String
+        },
+        methods: {
+          change() {
+            this.$emit('change', 'jw')
+          }
+        },
+        template: `
+          <button @click="change">{{title}}</button>`
+      }
+    }
+  })
+  // 组件v-model是基于发布订阅触发事件
+  // (function anonymous() {
+  //   with(this){
+  //     return _c('div', {attrs:{"id":"app"}},[
+  //       _c('my',{
+  //         model:{
+  //           value:(title),
+  //           callback:function ($$v) {
+  //             title=$$v
+  //           },
+  //           expression:"title"
+  //         }
+  //       })
+  //     ],1)
+  //   }
+  // })
+</script>
+</body>
+</html>

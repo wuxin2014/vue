@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+<div id="app">
+  <div>{{ firstname }} {{ fullName }}</div>
+</div>
+<script src="../../dist/vue.js"></script>
+<script>
+  // with(this){return _c('div',{attrs:{"id":"app"}},[_c('div',[_v(_s(firstname)+" "+_s(fullName))])])}
+  // 渲染watcher / computed watcher / user watcher
+  const vm = new Vue({
+    el: '#app',
+    data: {
+      firstname: '张',
+      lastname: '三'
+    },
+    /**
+     * 计算属性默认不执行 =》 Object.defineProperty
+     * 多次取值如果依赖不变，就不会重新执行
+     * 依赖值变化，重新执行
+     */
+    computed: {
+      fullName() { // firstName lastName 会收集fullName计算属性
+        console.log('computer===');
+        return this.firstname + this.lastname
+      }
+    }
+  });
+  setTimeout(() => {
+    vm.firstname = '赵'
+  }, 1000);
+
+</script>
+</body>
+
+</html>

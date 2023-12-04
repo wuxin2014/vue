@@ -1,0 +1,51 @@
+<html>
+  <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  </head>
+<body>
+  <div id='app'>
+    <!--<div>
+      <label>key:<input type="text" v-model="id"></label>
+      <label>姓名<input type="text" v-model="name"></label>
+      <input type="button" value="添加" @click="add" />
+    </div>-->
+    <!--<p v-for="(item,index) in list" :key="index">
+      {{ item.name }} {{ item.id }}
+    </p>-->
+
+    <!--如果你去删除第一行的过程中，只会触发一次render，那么就会复现问题。也就是说，如果每一行的组件，不依赖于任何“响应式”数据，那么就不会有第二次render，问题就能复现！-->
+    <p v-for="(item,index) in list" :key="index">
+      <input />
+      {{ index }}
+    </p>
+    <div @click="remove">删除第一个</div>
+  </div>
+</body>
+<script src="../../dist/vue.js"></script>
+<script>
+  // 在使用非文本节点的组件，且这个组件没有依赖于响应式的props，此时使用index作为key，那么此时对于列表的删除操作会导致视图错乱。
+  /**
+   * 第一步：通过修改数据删除第一行，数据变化引起vue去更新视图，更新的过程中发现key相同，最终第一行保持不变，反而是第二行消失。这是第一次render。
+   * 第二步：第一行的VirtualDOM的确没有变，但是第一行的组件的props变了，由原来第一行的props，变成了第二行的props，由于props变化，第一行的组件需要使用新的props更新视图，最终第一行变成了第二行的样子。这是第二次render。
+   */
+  var vm = new Vue({
+    el:'#app',
+    data:{
+      id:"",
+      name:"",
+      list:[
+        {id:1, name:'张三'},
+        {id:2, name:'李四'},
+        {id:3, name:'王五'},
+      ],
+    },
+    methods:{
+      add(){
+        this.list.unshift({id:1,name:'xingxing'});
+      },
+      remove() {
+        this.list.shift();
+      }
+    }
+  });
+</script>

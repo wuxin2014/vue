@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+<script src="../../dist/vue.js"></script>
+<!--  <div v-html="content"></div>-->
+<div id="app">
+  <div v-html="msg"></div>
+</div>
+<script>
+  // html指令是不需要运行时函数的，而自定义指令是需要运行时函数来执行的
+  new Vue({
+    el: '#app',
+    data() {
+      // 引入xss包并挂载到vue原型上
+      return {
+        title: "title",
+        content: "<div>只在可信内容上使用 v-html，永不用在用户提交的内容上。<b>我是加粗文字</b><div>",
+        content2: `<a onclick='alert("链接xss攻击")'>链接</a>`,
+        img: `<img src="htpp:slslskkk" onerror='alert("图片xss攻击")' />图片`,
+        msg: "插入了一个脚本：<script>alert(1)<\/script>"
+      }
+    },
+    mounted() {
+      // 优雅的解决方案：<pre>
+      // 1. html5中为了安全起见，不会执行innerHTML中插入的<script>的代码
+      this.msg = "插入了一个脚本：<script>alert(1)<\/script>" //解释了标签，但是没有打印
+      // 2. 使用script标签插入的代码会执行
+      // var script = document.createElement('script');
+      // script.innerHTML = 'console.log(2)';
+      // this.$el.parentElement.appendChild(script); //打印了 2
+    }
+  })
+
+  // (function anonymous() {
+  //   with (this) {
+  //     return _c('div', {attrs: {"id": "app"}}, [
+  //       _c('div', {domProps: {"innerHTML": _s(content)}}),
+  //       _v(" "),
+  //       _c('div', {domProps: {"innerHTML": _s(img)}})
+  //     ])
+  //   }
+  // })
+</script>
+</body>
+
+</html>
