@@ -17,15 +17,14 @@
     el: '#app',
     data() {
       return {
-        name: 'hello',
-        age: 20,
-        info: {a: 10, b: 11, c: 16},
+        info: { name: 'hello', work: 'front' },
       }
     },
     methods: {
       handleClick() {
         debugger
-        this.$set(this.info, 'd', 33)
+        this.$set(this.info, 'age', 33) // 不能给根属性添加，因为给根添加属性 性能消耗太大，需要做很多处理
+        // 改肯定是同步 -> 更新都是异步的 queuewatccher
       }
     }
   });

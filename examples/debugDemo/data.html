@@ -33,6 +33,10 @@
             // console.log(this.count) // 主要是因为没有收集依赖
             this.name = this.name + '1'
             this.age = this.age + 1
+            console.log(this.name)
+            setTimeout(() => {
+              console.log(this.name)
+            }, 1000)
           }
         }
       })

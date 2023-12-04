@@ -9,17 +9,16 @@
 
 <body>
 <div id="app">
-  <div>{{ firstname }} {{ fullName }}</div>
+  <div>{{ firstName }} {{ fullName }}</div>
 </div>
 <script src="../../dist/vue.js"></script>
 <script>
-  // with(this){return _c('div',{attrs:{"id":"app"}},[_c('div',[_v(_s(firstname)+" "+_s(fullName))])])}
-  // 渲染watcher / computed watcher / user watcher
+  // 依赖收集有3种Watcher: Render Watcher, Computed Watcher, User Watcher
   const vm = new Vue({
     el: '#app',
     data: {
-      firstname: '张',
-      lastname: '三'
+      firstName: '叶',
+      lastName: '十七'
     },
     /**
      * 计算属性默认不执行 =》 Object.defineProperty
@@ -29,13 +28,35 @@
     computed: {
       fullName() { // firstName lastName 会收集fullName计算属性
         console.log('computer===');
-        return this.firstname + this.lastname
-      }
+        return this.firstName + this.lastName
+      },
+      // 第二种写法
+      // fullName: {
+      //   get() {
+      //     console.log('oooo')
+      //     return this.firstName + this.lastName
+      //   },
+      //   set(newValue) {
+      //     console.log(newValue);
+      //   }
+      // }
     }
   });
   setTimeout(() => {
-    vm.firstname = '赵'
+    vm.firstName = '张'
   }, 1000);
+
+  // 计算属性默认不执行 => Object.defineProperty => getter
+  // 多次取值如果依赖的值不变化 就不会重新执行  vm.fullName vm.fullName
+  // 依赖的值变化 需要重新执行 vm.firstName = 'zhang'  fullName zhangfeng
+
+  // dirty 表示这个值是不是脏的 true （取值后值变为false）， 依赖的值变化了 dirty=>true
+
+  // fullName => 计算属性watcher
+  // 计算属性watcher 收集了两个dep (firstName,lastName)
+
+  // 根据计算属性watcher找到这两个dep，让dep收集渲染watcher
+  // (firstName,lastName) 收集的渲染watcher
 
 </script>
 </body>
