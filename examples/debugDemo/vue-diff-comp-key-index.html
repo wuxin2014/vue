@@ -10,7 +10,8 @@
       :name="item.name"
     >
     </item>
-    <button @click="handleReserved">反转</button>
+    <button @click="handleRemove">删除第一个</button>
+    <!-- <button @click="handleReserved">反转</button> -->
   </div>
 </body>
 <script src="../../dist/vue.js"></script>
@@ -35,6 +36,9 @@
     methods:{
       handleReserved(){
         this.list.reverse()
+      },
+      handleRemove() {
+        this.list.shift();
       }
     }
   });

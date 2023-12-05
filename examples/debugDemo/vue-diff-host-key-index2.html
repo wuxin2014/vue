@@ -6,7 +6,7 @@
 <body>
   <div id='app'>
     <div v-for="(item,index) in list" :key="index">
-      <input />
+      <input v-model="item.name" />
       {{ index }}
     </div>
     <div @click="remove">删除第一个</div>
@@ -14,9 +14,6 @@
 </body>
 <script src="../../dist/vue.js"></script>
 <script>
-  /**
-   * 在使用非文本节点的组件，且这个组件没有依赖于响应式的props，此时使用index作为key，那么此时对于列表的删除操作会导致视图错乱。
-   */
   var vm = new Vue({
     el:'#app',
     data:{

@@ -523,7 +523,7 @@ export function createPatchFunction (backend) {
       vnode = ownerArray[index] = cloneVNode(vnode)
     }
 
-    const elm = vnode.elm = oldVnode.elm
+    const elm = vnode.elm = oldVnode.elm // 这一步注重点
 
     if (isTrue(oldVnode.isAsyncPlaceholder)) {
       if (isDef(vnode.asyncFactory.resolved)) {
