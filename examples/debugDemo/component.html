@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>多个相同组件extend时缓存</title>
+</head>
+<body>
+<script src="../../dist/vue.js"></script>
+<div id="app">
+  <div>parent</div>
+  <div @click="handClick">change title</div>
+  <my @change="handClick" :title="title"></my>
+  <my :title="title2"></my>
+</div>
+<script>
+  let vm = new Vue({
+    el: '#app',
+    components: {
+      my: {
+        template: `
+          <div style="padding: 10px">
+            <button @click="change">{{title}}</button>
+          </div>
+        `,
+        props: {
+          title: String,
+        },
+        computed: {
+          txt() {
+            return this.title
+          }
+        },
+        methods: {
+          change() {
+            this.$emit('change', 'jw')
+          }
+        }
+      },
+    },
+    data() {
+      return {
+        title: 'nihao',
+        title2: 'haha'
+      }
+    },
+    methods: {
+      handClick(val) {
+        this.title = val
+      }
+    }
+  });
+  console.log(vm)
+</script>
+</body>
+</html>

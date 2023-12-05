@@ -28,7 +28,7 @@ export function initMixin (Vue: Class<Component>) {
 
     // a flag to avoid this being observed
     vm._isVue = true
-    // merge options
+    // merge options 选项合并
     if (options && options._isComponent) {
       // optimize internal component instantiation
       // since dynamic options merging is pretty slow, and none of the
@@ -37,7 +37,7 @@ export function initMixin (Vue: Class<Component>) {
     } else {
       // $options的赋值 => mergeOptions
       vm.$options = mergeOptions(
-        resolveConstructorOptions(vm.constructor),
+        resolveConstructorOptions(vm.constructor), // 实例构造函数上获取options
         options || {},
         vm
       )

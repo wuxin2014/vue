@@ -426,6 +426,7 @@ export function mergeOptions (
 
   const options = {}
   let key
+  // parent对象上的属性key: components, directives, filters, _base
   for (key in parent) {
     mergeField(key)
   }

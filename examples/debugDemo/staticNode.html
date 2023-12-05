@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+<script src="../dist/vue.js"></script>
+<div id="app">
+  <div style="color: red"><span>parent</span></div>
+  <com-a></com-a>
+</div>
+<script>
+  new Vue({
+    el: '#app',
+    components: {
+      comA: {
+        template: `<div>
+          <div>children</div>
+          <com-b></com-b>
+        </div>`,
+        components: {
+          comB: {
+            inject: ['foo'],
+            template: `<div>{{ foo }}</div>`,
+          }
+        }
+      }
+    },
+    provide:{
+      foo: 'bar'
+    },
+    data() {
+      return {
+        name: 'hahatext'
+      }
+    }
+  })
+  /**
+   * 静态根节点意思是所有子节点是静态节点，父节点是动态的，那么自己就是静态根节点，staticRoot为true
+   * 节点使用了v-pre指令 => 就直接是一个静态节点
+   * 如果没有使用v-pre指令，那它要成为静态节点必须满足:
+   * 1. 不能使用动态绑定语法，即标签上不能有v-、@、:开头的属性
+   * 2. 不能使用v-if、v-else、v-for指令；
+   * 3. 不能是内置组件，即标签名不能是slot和component；
+   * 4. 标签名必须是平台保留标签，即不能是组件；
+   * 5. 当前节点的父节点不能是带有 v-for 的 template 标签；
+   * 6. 节点的所有属性的 key 都必须是静态节点才有的 key，注：静态节点的key是有限的，它只能是type,tag,attrsList,attrsMap,plain,parent,children,attrs之一；
+  */
+  // 注意：只有纯文本子节点时，他是静态节点，但是不是静态根节点。静态根节点是optimize 优化的条件，没有静态根节点，说明这部分不会被优化
+  // _m(0) 这个函数就是去获取静态模板的
+  (function anonymous() {
+    with(this){
+      return _c('div',{attrs:{"id":"app"}},[_m(0),_v(" "),_c('com-a')],1)
+    }
+  })
+</script>
+</body>
+
+</html>
