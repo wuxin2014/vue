@@ -10,6 +10,7 @@
 <body>
 <script src="../../dist/vue.js"></script>
 <div id="app">
+  <h1>parent</h1>
   <com-a v-bind="{name, age, sex}" v-on="{changeName, changeSex}"></com-a>
 </div>
 <script>
@@ -24,12 +25,12 @@
           }
         },
         template: `<div>
-          <div>children</div>
+          <div>comA-$attrs: {{$attrs}}</div>
           <com-b v-bind="$attrs" v-on="$listeners"></com-b>
         </div>`,
         components: {
           comB: {
-            template: `<div>{{ foo }} {{ this.$attrs }}</div>`,
+            template: `<div>comB-$attrs: {{ this.$attrs }}</div>`,
           }
         }
       }

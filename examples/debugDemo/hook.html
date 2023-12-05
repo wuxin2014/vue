@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>data-debugger</title>
+    <style>
+      body {
+        font-family: Menlo, Consolas, monospace;
+        color: #444;
+      }
+    </style>
+    <script src="../../dist/vue.js"></script>
+  </head>
+  <body>
+    <!-- App template (in DOM) -->
+    <div id="app">
+      <div>{{ name }}</div>
+    </div>
+    <script>
+      var app = new Vue({
+        el: '#app',
+        data: {
+          name: 'haha'
+        },
+        beforeCreate: [
+          function() {
+            console.log('before 1')
+          },
+          function() {
+            console.log('before 2')
+          }
+        ]
+      })
+    </script>
+  </body>
+</html>

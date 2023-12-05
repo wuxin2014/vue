@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+<script src="../../dist/vue.js"></script>
+<div id="app">
+  parent
+  <div style="color: red">parent</div>
+  <com-a></com-a>
+</div>
+<script>
+  debugger
+  const vm = new Vue({
+    el: '#app',
+    components: {
+      comA: {
+        template: `<div>
+          <div>children</div>
+          <com-b></com-b>
+        </div>`,
+        components: {
+          comB: {
+            inject: ['foo'],
+            template: `<div>{{ foo }}</div>`,
+          }
+        },
+        mounted() {
+          console.log('children:',this.$parent)
+        }
+      }
+    },
+    provide:{
+      foo: 'bar'
+    },
+    data() {
+      return {
+        name: 'hahatext'
+      }
+    },
+    mounted() {
+      console.log('children:',this.$children)
+    }
+  })
+  console.log(vm)
+</script>
+</body>
+
+</html>

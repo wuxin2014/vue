@@ -81,10 +81,10 @@ export function initInternalComponent (vm: Component, options: InternalComponent
   opts.parent = options.parent
   opts._parentVnode = parentVnode
 
-  const vnodeComponentOptions = parentVnode.componentOptions
+  const vnodeComponentOptions = parentVnode.componentOptions // componentOptions
   opts.propsData = vnodeComponentOptions.propsData
-  opts._parentListeners = vnodeComponentOptions.listeners
-  opts._renderChildren = vnodeComponentOptions.children // 注意这里_renderChildren的赋值
+  opts._parentListeners = vnodeComponentOptions.listeners // 注意_parentListeners
+  opts._renderChildren = vnodeComponentOptions.children // 注意_renderChildrens
   opts._componentTag = vnodeComponentOptions.tag
 
   if (options.render) {
