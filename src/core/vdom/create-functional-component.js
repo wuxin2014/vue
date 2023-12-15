@@ -110,6 +110,7 @@ export function createFunctionalComponent (
     if (isDef(data.props)) mergeProps(props, data.props)
   }
 
+  // 创建函数组件上下文
   const renderContext = new FunctionalRenderContext(
     data,
     props,
@@ -118,6 +119,7 @@ export function createFunctionalComponent (
     Ctor
   )
 
+  // 直接调用render函数，得到函数组件vnode
   const vnode = options.render.call(null, renderContext._c, renderContext)
 
   if (vnode instanceof VNode) {

@@ -10,10 +10,10 @@ export function initUse (Vue: GlobalAPI) {
     }
 
     // additional parameters
-    const args = toArray(arguments, 1)
+    const args = toArray(arguments, 1) // 从arguments数组第1个位置开始，为plugin的option参数
     args.unshift(this)
     if (typeof plugin.install === 'function') {
-      plugin.install.apply(plugin, args)
+      plugin.install.apply(plugin, args) // 指定插件install函数中this为plugin对象本身
     } else if (typeof plugin === 'function') {
       plugin.apply(null, args)
     }
