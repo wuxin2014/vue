@@ -98,9 +98,9 @@ export function createFunctionalComponent (
   contextVm: Component,
   children: ?Array<VNode>
 ): VNode | Array<VNode> | void {
-  const options = Ctor.options
-  const props = {}
-  const propOptions = options.props
+  const options = Ctor.options // 构造函数对象上的options属性
+  const props = {} // 属性对象
+  const propOptions = options.props // 获取propOptions
   if (isDef(propOptions)) {
     for (const key in propOptions) {
       props[key] = validateProp(key, propOptions, propsData || emptyObject)

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+<script src="../../dist/vue.js"></script>
+<div id="app"></div>
+<script>
+  // 插件
+  const plugin = (Vue, options) => {
+    console.log('plugin', options)
+    Vue.mixin({
+      // 等Vue初始化，执行beforeCreate钩子函数时会到这里
+      beforeCreate () {
+        Vue.util.defineReactive(this, '_routeA', options) // 响应式定义
+      }
+    })
+  }
+  
+  Vue.use(plugin, {a: 1});
+  const vm = new Vue({
+    el: '#app',
+  })
+  
+</script>
+</body>
+
+</html>

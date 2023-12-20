@@ -222,9 +222,9 @@ export function createPatchFunction (backend) {
       // component also has set the placeholder vnode's elm.
       // in that case we can just return the element and be done.
       if (isDef(vnode.componentInstance)) {
-        // todo这一步的作用是什么
+        // 这一步的作用：将vnode的组件实例上$el 赋值给 vnode的elm属性
         initComponent(vnode, insertedVnodeQueue)
-        // 组件的插入真实dom
+        // 将vnode.elm插入到父级元素上
         insert(parentElm, vnode.elm, refElm)
         if (isTrue(isReactivated)) {
           reactivateComponent(vnode, insertedVnodeQueue, parentElm, refElm)
@@ -240,7 +240,7 @@ export function createPatchFunction (backend) {
       insertedVnodeQueue.push.apply(insertedVnodeQueue, vnode.data.pendingInsert)
       vnode.data.pendingInsert = null
     }
-    vnode.elm = vnode.componentInstance.$el
+    vnode.elm = vnode.componentInstance.$el // 重点 将vnode的组件实例上$el 赋值给 vnode的elm属性
     if (isPatchable(vnode)) {
       invokeCreateHooks(vnode, insertedVnodeQueue)
       setScope(vnode)
