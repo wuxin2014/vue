@@ -757,11 +757,11 @@ export function createPatchFunction (backend) {
           }
           // either not server-rendered, or hydration failed.
           // create an empty node and replace it
-          oldVnode = emptyNodeAt(oldVnode) // 根据元素节点得到一个空的vnode
+          oldVnode = emptyNodeAt(oldVnode) // 根据元素节点得到一个空的vnode，下面oldVnode.elm的来源
         }
 
         // replacing existing element
-        const oldElm = oldVnode.elm // 旧的节点元素
+        const oldElm = oldVnode.elm // 旧的节点元素, oldVnode.elm怎么来的
         const parentElm = nodeOps.parentNode(oldElm) // 找其父节点元素 => 应该是body元素
 
         // create new node 首次渲染生成dom

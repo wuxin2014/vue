@@ -20,7 +20,7 @@
           }
         }
       },
-      // 用户watcher
+      // 用户watcher,居然收集到3个dep, this.person收集一次, this.person的值是对象又收集一次， this.person.age也收集一次
       watch: {
         'person.age': {
           handle(newVal, oldVal) {

@@ -70,9 +70,9 @@ export default class Watcher {
     this.active = true
     this.dirty = this.lazy // for lazy watchers
     this.deps = []
-    this.newDeps = []
+    this.newDeps = [] // 新的deps数组
     this.depIds = new Set()
-    this.newDepIds = new Set()
+    this.newDepIds = new Set() // 新的depIds
     this.expression = process.env.NODE_ENV !== 'production'
       ? expOrFn.toString()
       : ''
@@ -80,7 +80,7 @@ export default class Watcher {
     if (typeof expOrFn === 'function') {
       this.getter = expOrFn
     } else {
-      this.getter = parsePath(expOrFn)
+      this.getter = parsePath(expOrFn) // 注意这个函数
       if (!this.getter) {
         this.getter = noop
         process.env.NODE_ENV !== 'production' && warn(
@@ -104,7 +104,7 @@ export default class Watcher {
     let value
     const vm = this.vm
     try {
-      value = this.getter.call(vm, vm)
+      value = this.getter.call(vm, vm) // this.getter 取值函数
     } catch (e) {
       if (this.user) {
         handleError(e, vm, `getter for watcher "${this.expression}"`)
@@ -118,7 +118,7 @@ export default class Watcher {
         traverse(value)
       }
       popTarget()
-      this.cleanupDeps()
+      this.cleanupDeps() // 注意这个函数的调用
     }
     return value
   }
@@ -139,6 +139,7 @@ export default class Watcher {
 
   /**
    * Clean up for dependency collection.
+   * 清空依赖收集
    */
   cleanupDeps () {
     let i = this.deps.length // 更新时deps应该是有值的

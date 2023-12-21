@@ -167,6 +167,7 @@ export function getData (data: Function, vm: Component): any {
 
 const computedWatcherOptions = { lazy: true }
 
+// initComputed 处理computed逻辑
 function initComputed (vm: Component, computed: Object) {
   // $flow-disable-line
   const watchers = vm._computedWatchers = Object.create(null)
@@ -174,7 +175,8 @@ function initComputed (vm: Component, computed: Object) {
   const isSSR = isServerRendering()
 
   for (const key in computed) {
-    const userDef = computed[key]
+    const userDef = computed[key] // 可能是函数，可能是对象
+    // 获取getter
     const getter = typeof userDef === 'function' ? userDef : userDef.get
     if (process.env.NODE_ENV !== 'production' && getter == null) {
       warn(
@@ -184,7 +186,7 @@ function initComputed (vm: Component, computed: Object) {
     }
 
     if (!isSSR) {
-      // create internal watcher for the computed property.
+      // create internal watcher for the computed property. 创建computedWatcher
       watchers[key] = new Watcher(
         vm,
         getter || noop,
@@ -238,17 +240,20 @@ export function defineComputed (
       )
     }
   }
+  // 在实例上定义computed的key值
   Object.defineProperty(target, key, sharedPropertyDefinition)
 }
 
 function createComputedGetter (key) {
   return function computedGetter () {
+    debugger
     const watcher = this._computedWatchers && this._computedWatchers[key]
     if (watcher) {
       if (watcher.dirty) {
-        watcher.evaluate()
+        watcher.evaluate() // 首次取值watcher.dirty为true,直接计算取值，并将watcher.dirty改为alse
       }
       if (Dep.target) {
+        // 回到computer wacher之前的watcher, 对于watcher newDepIds没有存在dep.id添加下
         watcher.depend()
       }
       return watcher.value
@@ -292,6 +297,7 @@ function initMethods (vm: Component, methods: Object) {
 }
 
 function initWatch (vm: Component, watch: Object) {
+  debugger
   for (const key in watch) {
     const handler = watch[key]
     if (Array.isArray(handler)) {
@@ -315,6 +321,7 @@ function createWatcher (
     options = handler
     handler = handler.handler
   }
+  // handler如果是字符串,从vm上取
   if (typeof handler === 'string') {
     handler = vm[handler]
   }
@@ -358,7 +365,7 @@ export function stateMixin (Vue: Class<Component>) {
     }
     options = options || {}
     options.user = true
-    // userWatcher
+    // 创建userWatcher
     const watcher = new Watcher(vm, expOrFn, cb, options)
     // 立马执行的参数
     if (options.immediate) {

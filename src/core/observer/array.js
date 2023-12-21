@@ -7,7 +7,7 @@ import { def } from '../util/index'
 
 // 拿到数组原型对象
 const arrayProto = Array.prototype
-// 创建新的数组方法对象，在数组原型的基础上
+// 创建新的数组方法对象，在数组原型的基础上, 以原型链建立连接
 export const arrayMethods = Object.create(arrayProto)
 
 const methodsToPatch = [

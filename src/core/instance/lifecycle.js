@@ -21,6 +21,7 @@ import {
 export let activeInstance: any = null
 export let isUpdatingChildComponent: boolean = false
 
+// 设置当前活动实例
 export function setActiveInstance(vm: Component) {
   const prevActiveInstance = activeInstance
   activeInstance = vm
@@ -61,8 +62,8 @@ export function lifecycleMixin (Vue: Class<Component>) {
     const vm: Component = this
     const prevEl = vm.$el
     const prevVnode = vm._vnode
-    const restoreActiveInstance = setActiveInstance(vm)
-    vm._vnode = vnode
+    const restoreActiveInstance = setActiveInstance(vm) // 设置当前活动实例为vm
+    vm._vnode = vnode // 实例_vnode属性的赋值
     // Vue.prototype.__patch__ is injected in entry points
     // based on the rendering backend used.
     if (!prevVnode) {
@@ -72,7 +73,7 @@ export function lifecycleMixin (Vue: Class<Component>) {
       // updates
       vm.$el = vm.__patch__(prevVnode, vnode)
     }
-    restoreActiveInstance()
+    restoreActiveInstance() // 重置活动实例为原来的
     // update __vue__ reference
     if (prevEl) {
       prevEl.__vue__ = null

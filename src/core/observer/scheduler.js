@@ -89,7 +89,7 @@ function flushSchedulerQueue () {
   // as we run existing watchers
   for (index = 0; index < queue.length; index++) {
     watcher = queue[index]
-    if (watcher.before) {
+    if (watcher.before) { // 渲染watcher才会有before属性
       watcher.before()
     }
     id = watcher.id
