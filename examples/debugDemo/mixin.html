@@ -26,6 +26,59 @@
   </div>
   <script>
     debugger
+    const mixin1 = {
+      props: {
+        visible: {
+          type: Boolean,
+          default: true
+        },
+      },
+      components: {
+        'my-com': {
+          template: `<div>{{content}}</div>`,
+          data() {
+            return {
+              content: 'my-com-test2'
+            }
+          }
+        }
+      },
+      data() {
+        return {
+          name: 'test1',
+          age: 20
+        }
+      },
+      created() {
+        console.log('mixin1-created!')
+      },
+      watch: {
+        visible(val) {
+          console.log('mixin1-watch==', val)
+        }
+      },
+      methods: {
+        showAge() {
+          console.log('showAge from mixin!')
+        }
+      }
+    }
+    const mixin2 = {
+      data() {
+        return {
+          name: 'test2',
+          age: 19
+        }
+      },
+      created() {
+        console.log('mixin2-created!')
+      },
+      methods: {
+        showAge() {
+          console.log('showAge from mixin2!')
+        }
+      }
+    }
     Vue.component('custom-input', {
       template: '#custom-input-template',
       // 局部注册组件
@@ -39,66 +92,18 @@
           }
         }
 			},
+      props: {
+        visible: {
+          type: Boolean,
+          default: false
+        },
+      },
+      mixins: [ mixin1, mixin2 ],
       data() {
         return {
           name: 'dd',
         }
       },
-      mixins: [
-        {
-          props: {
-            visible: {
-              type: Boolean,
-              default: false
-            },
-          },
-          components: {
-            'my-com': {
-              template: `<div>{{content}}</div>`,
-              data() {
-                return {
-                  content: 'my-com-test2'
-                }
-              }
-            }
-          },
-          data() {
-            return {
-              name: 'test1',
-              age: 20
-            }
-          },
-          created() {
-            console.log('mixin1-created!')
-          },
-          watch: {
-            visible(val) {
-              console.log('mixin1-watch==', val)
-            }
-          },
-          methods: {
-            showAge() {
-              console.log('showAge from mixin!')
-            }
-          }
-        },
-        {
-          data() {
-            return {
-              name: 'test2',
-              age: 19
-            }
-          },
-          created() {
-            console.log('mixin2-created!')
-          },
-          methods: {
-            showAge() {
-              console.log('showAge from mixin2!')
-            }
-          }
-        }
-      ],
       created() {
         console.log('component-created!')
       },

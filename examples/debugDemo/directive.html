@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>directive-debugger</title>
+    <title>自定义指令 directive-debugger</title>
     <style>
       body {
         font-family: Menlo, Consolas, monospace;
@@ -24,12 +24,18 @@
           el.style.top = binding.value + 'px'
         }
       })
-      // 动态指令 v-pin:[direction]="200"  direction:'left'
+      // 动态指令参数 v-pin:[direction]="200"  direction:'left'
       Vue.directive('pin', {
         bind: function (el, binding, vnode) {
           el.style.position = 'fixed'
           var s = (binding.arg == 'left' ? 'left' : 'top')
           el.style[s] = binding.value + 'px'
+        }
+      })
+      // <div id="hook-arguments-example" v-demo:foo.a.b="message"></div>
+      Vue.directive('demo', {
+        bind: function (el, binding, vnode) {
+          // binding对象: { name: 'demo', value: message变量值, expression: message, arg: foo, modifiers: {a:true, b:true}}
         }
       })
       var app = new Vue({
