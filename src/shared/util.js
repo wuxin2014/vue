@@ -112,6 +112,7 @@ export function makeMap (
   for (let i = 0; i < list.length; i++) {
     map[list[i]] = true
   }
+  // 返回新的函数
   return expectsLowerCase
     ? val => map[val.toLowerCase()]
     : val => map[val]
@@ -192,6 +193,7 @@ export const hyphenate = cached((str: string): string => {
 
 /* istanbul ignore next */
 function polyfillBind (fn: Function, ctx: Object): Function {
+  // 传入了函数跟上下文ctx, 返回了新的函数
   function boundFn (a) {
     const l = arguments.length
     return l
@@ -215,6 +217,7 @@ export const bind = Function.prototype.bind
 
 /**
  * Convert an Array-like object to a real Array.
+ * 将类数组对象转换成真正的数组
  */
 export function toArray (list: any, start?: number): Array<any> {
   start = start || 0
@@ -335,6 +338,7 @@ export function looseIndexOf (arr: Array<mixed>, val: mixed): number {
  */
 export function once (fn: Function): Function {
   let called = false
+  // 传入一个函数，返回一个新函数
   return function () {
     if (!called) {
       called = true

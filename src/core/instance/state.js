@@ -148,7 +148,7 @@ function initData (vm: Component) {
       proxy(vm, `_data`, key)
     }
   }
-  // observe data
+  // observe data 观察对象
   observe(data, true /* asRootData */)
 }
 
@@ -291,7 +291,7 @@ function initMethods (vm: Component, methods: Object) {
         )
       }
     }
-    // methods处理，直接放到vm了实例上, 注意bind()
+    // methods处理，直接放到vm了实例上, 注意bind函数会改变this指向
     vm[key] = typeof methods[key] !== 'function' ? noop : bind(methods[key], vm)
   }
 }

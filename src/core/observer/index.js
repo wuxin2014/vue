@@ -41,9 +41,10 @@ export class Observer {
 
   constructor (value: any) {
     this.value = value
-    this.dep = new Dep()
+    this.dep = new Dep() // 这个dep的作用是什么, $set函数，观察者对象添加新的属性时，会执行dep.notify()
     this.vmCount = 0
-    def(value, '__ob__', this) // value可能是对象，可能是数组
+    def(value, '__ob__', this)
+    // value可能是对象，可能是数组
     if (Array.isArray(value)) {
       if (hasProto) {
         protoAugment(value, arrayMethods)
@@ -52,6 +53,7 @@ export class Observer {
       }
       this.observeArray(value) // 数组单个元素进行观察
     } else {
+      // 对象处理
       this.walk(value)
     }
   }
@@ -121,6 +123,7 @@ export function observe (value: any, asRootData: ?boolean): Observer | void {
     Object.isExtensible(value) &&
     !value._isVue
   ) {
+    // new Observer对象，对value数据进行观察
     ob = new Observer(value)
   }
   if (asRootData && ob) {
@@ -137,9 +140,9 @@ export function defineReactive (
   key: string,
   val: any,
   customSetter?: ?Function,
-  shallow?: boolean
+  shallow?: boolean // 是否浅层观察
 ) {
-  const dep = new Dep()
+  const dep = new Dep() // 每个key的dep
 
   const property = Object.getOwnPropertyDescriptor(obj, key)
   if (property && property.configurable === false) {
@@ -150,10 +153,11 @@ export function defineReactive (
   const getter = property && property.get
   const setter = property && property.set
   if ((!getter || setter) && arguments.length === 2) { // arguments.length === 2 说明defineReactive()只传了obj,key
-    val = obj[key]
+    val = obj[key] // 根据属性key取值
   }
 
   let childOb = !shallow && observe(val) // 继续观察val，val可能是对象或数组类型数据
+  // 使用Object.defineProperty实现对象属性监听
   Object.defineProperty(obj, key, {
     enumerable: true,
     configurable: true,
@@ -163,7 +167,7 @@ export function defineReactive (
       if (Dep.target) {
         dep.depend()
         if (childOb) {
-          childOb.dep.depend()
+          childOb.dep.depend() // 这行理解不够(childOb.dep添加依赖收集，在$set添加新的属性中，会执行dep.notify())
           if (Array.isArray(value)) {
             dependArray(value)
           }
@@ -230,8 +234,8 @@ export function set (target: Array<any> | Object, key: any, val: any): any {
     return val
   }
   // 数组跟对象新增项或者属性
-  defineReactive(ob.value, key, val) // 注意ob.value
-  ob.dep.notify()
+  defineReactive(ob.value, key, val) // 监听新的属性，注意ob.value
+  ob.dep.notify() // 通知更新
   return val
 }
 

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>依赖收集debugger</title>
+    <style>
+      body {
+        font-family: Menlo, Consolas, monospace;
+        color: #444;
+      }
+    </style>
+    <script src="../../dist/vue.js"></script>
+  </head>
+  <body>
+    <!-- App template (in DOM) -->
+    <div id="app">
+      <div>{{ info.name }}-{{ info.age }}</div>
+      <button @click="handleClick">toggle</button>
+    </div>
+    <script>
+      var app = new Vue({
+        el: '#app',
+        data() {
+          return {
+            count: 1,
+            info: {  name: 'haha', age: 1000 }
+          }
+        },
+        methods: {
+          handleClick() {
+            this.info.name = 'test-name'
+          }
+        }
+      })
+
+      // (function anonymous() {
+      //   with(this){
+      //     return _c('div',{attrs:{"id":"app"}},[
+      //       _c('div',[_v(_s(info.name)+"-"+_s(info.age))]),
+      //       _v(" "),
+      //       _c('button',{on:{"click":handleClick}},[_v("toggle")])
+      //     ])
+      //   }
+      // })
+
+      /**
+       * 挂载时渲染watcher执行后，render函数执行，
+       * 取值info.name: 先是this.info取值会触发属性info依赖收集, 然后this.info.name会触发属性name的依赖收集
+       * 取值info.age: 先是this.info取值会触发属性info依赖收集(info之前收集过，不会重复收集), 然后this.info.age会触发属性age的依赖收集
+       * 
+       * methods中 handleClick函数执行时，this.info.name = 'test-name', 先是this.info的仅仅取值，Dep.Target不存在不会触发依赖收集，然后就是name的赋值了，会触发更新
+       */ 
+    </script>
+  </body>
+</html>
