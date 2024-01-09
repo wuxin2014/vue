@@ -22,10 +22,16 @@
       },
       // 用户watcher,居然收集到3个dep, this.person收集一次, this.person的值是对象又收集一次， this.person.age也收集一次
       watch: {
-        'person.age': {
-          handle(newVal, oldVal) {
-            console.log(newVal, oldVal)
-          },
+        // 'person.age': {
+        //   handle(newVal, oldVal) {
+        //     console.log('==写法1==', newVal, oldVal)
+        //   },
+        // },
+        // 'person.age': (newVal, oldVal) => {
+        //   console.log('==写法2==', newVal, oldVal)
+        // }
+        'person.age'(newVal, oldVal) {
+          console.log('==写法3==', newVal, oldVal)
         }
       }
     });

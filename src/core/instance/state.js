@@ -250,7 +250,7 @@ function createComputedGetter (key) {
     const watcher = this._computedWatchers && this._computedWatchers[key]
     if (watcher) {
       if (watcher.dirty) {
-        watcher.evaluate() // 首次取值watcher.dirty为true,直接计算取值，并将watcher.dirty改为alse
+        watcher.evaluate() // 首次取值watcher.dirty为true,直接计算取值，并将watcher.dirty改为false
       }
       if (Dep.target) {
         // 回到computer wacher之前的watcher, 对于watcher newDepIds没有存在dep.id添加下
@@ -299,13 +299,13 @@ function initMethods (vm: Component, methods: Object) {
 function initWatch (vm: Component, watch: Object) {
   debugger
   for (const key in watch) {
-    const handler = watch[key]
+    const handler = watch[key] // 对象，函数，字符串，数组(没理解)
     if (Array.isArray(handler)) {
       for (let i = 0; i < handler.length; i++) {
         createWatcher(vm, key, handler[i])
       }
     } else {
-      createWatcher(vm, key, handler)
+      createWatcher(vm, key, handler) // 看createWatcher函数中参数，key是函数有点懵
     }
   }
 }
@@ -316,15 +316,16 @@ function createWatcher (
   handler: any,
   options?: Object
 ) {
-  // handler可能是对象，函数，字符串(没理解)
+  // handler可能是对象，函数，字符串
   if (isPlainObject(handler)) {
     options = handler
     handler = handler.handler
   }
-  // handler如果是字符串,从vm上取
+  // handler如果是字符串,从vm实例上取
   if (typeof handler === 'string') {
     handler = vm[handler]
   }
+  // 入参我理解为：监听什么字段参数，回调函数参数，选项参数
   return vm.$watch(expOrFn, handler, options)
 }
 
@@ -360,6 +361,7 @@ export function stateMixin (Vue: Class<Component>) {
     options?: Object
   ): Function {
     const vm: Component = this
+    // 为普通对象，还未理解
     if (isPlainObject(cb)) {
       return createWatcher(vm, expOrFn, cb, options)
     }

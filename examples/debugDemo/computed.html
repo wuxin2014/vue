@@ -41,6 +41,10 @@
       //     console.log(newValue);
       //   }
       // }
+    },
+    created() {
+      // 声明周期created中取computed的fullname值，注意调试
+      console.log(this.fullName)
     }
   });
   setTimeout(() => {

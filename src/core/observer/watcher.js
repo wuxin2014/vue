@@ -80,7 +80,7 @@ export default class Watcher {
     if (typeof expOrFn === 'function') {
       this.getter = expOrFn
     } else {
-      this.getter = parsePath(expOrFn) // 注意这个函数
+      this.getter = parsePath(expOrFn) // parsePath函数里，返回了一个函数
       if (!this.getter) {
         this.getter = noop
         process.env.NODE_ENV !== 'production' && warn(
@@ -91,6 +91,7 @@ export default class Watcher {
         )
       }
     }
+    // 取值逻辑
     this.value = this.lazy
       ? undefined
       : this.get()
@@ -100,7 +101,7 @@ export default class Watcher {
    * Evaluate the getter, and re-collect dependencies.
    */
   get () {
-    pushTarget(this)
+    pushTarget(this) // 注意pushTarget
     let value
     const vm = this.vm
     try {
@@ -117,7 +118,7 @@ export default class Watcher {
       if (this.deep) {
         traverse(value)
       }
-      popTarget()
+      popTarget() // 注意popTarget
       this.cleanupDeps() // 注意这个函数的调用
     }
     return value
@@ -180,7 +181,9 @@ export default class Watcher {
    */
   run () {
     if (this.active) {
+      // 获取新值
       const value = this.get()
+      // 新值旧值比较
       if (
         value !== this.value ||
         // Deep watchers and watchers on Object/Arrays should fire even
@@ -194,7 +197,7 @@ export default class Watcher {
         this.value = value
         if (this.user) {
           const info = `callback for watcher "${this.expression}"`
-          // userWatcher, 新值跟旧值问题
+          // userWatcher, cb回调函数执行
           invokeWithErrorHandling(this.cb, this.vm, [value, oldValue], this.vm, info)
         } else {
           this.cb.call(this.vm, value, oldValue)

@@ -39,7 +39,7 @@ export function parsePath (path: string): any {
   return function (obj) {
     for (let i = 0; i < segments.length; i++) {
       if (!obj) return
-      obj = obj[segments[i]]
+      obj = obj[segments[i]] // 拿值
     }
     return obj
   }

@@ -20,14 +20,19 @@
       },
       // 用户watcher
       watch: {
-        firstName(newVal, oldVal) {
-          console.log(newVal, oldVal)
-        },
+        // firstName(newVal, oldVal) {
+        //   console.log(newVal, oldVal)
+        // },
+        firstName: 'nameFn' // 字符串
+      },
+      methods: {
+        nameFn(newVal, oldVal) {
+          console.log('==方法==', newVal, oldVal)
+        }
       }
     });
     setTimeout(() => {
       vm.firstName = 'zs'
-      console.log(vm.fullName)
     }, 1000);
   </script>
 </body>
