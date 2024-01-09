@@ -46,12 +46,14 @@ export class Observer {
     def(value, '__ob__', this)
     // value可能是对象，可能是数组
     if (Array.isArray(value)) {
+      // 对数组的方法进行重写，以便对其拦截
       if (hasProto) {
         protoAugment(value, arrayMethods)
       } else {
         copyAugment(value, arrayMethods, arrayKeys)
       }
-      this.observeArray(value) // 数组单个元素进行观察
+      // 对数组进行监听(单个单个的)
+      this.observeArray(value) 
     } else {
       // 对象处理
       this.walk(value)
