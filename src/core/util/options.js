@@ -63,7 +63,7 @@ function mergeData (to: Object, from: ?Object): Object {
     if (key === '__ob__') continue
     toVal = to[key]
     fromVal = from[key]
-    if (!hasOwn(to, key)) { // 如果to对象中不包含当前key，set下
+    if (!hasOwn(to, key)) { // 如果to对象中不包含当前key，set下，否则以to对象为主
       set(to, key, fromVal)
     } else if (
       toVal !== fromVal &&
@@ -113,6 +113,7 @@ export function mergeDataOrFn (
         ? parentVal.call(vm, vm)
         : parentVal
       if (instanceData) {
+        // mergeData函数，以instanceData对象为主(遇到相同属性key时)
         return mergeData(instanceData, defaultData)
       } else {
         return defaultData
@@ -190,7 +191,7 @@ function mergeAssets (
   vm?: Component,
   key: string
 ): Object {
-  const res = Object.create(parentVal || null)
+  const res = Object.create(parentVal || null) // 原型链进行连接
   if (childVal) {
     process.env.NODE_ENV !== 'production' && assertObjectType(key, childVal, vm)
     return extend(res, childVal) // 将childVal的属性赋值到res对象
@@ -209,6 +210,7 @@ ASSET_TYPES.forEach(function (type) {
  *
  * Watchers hashes should not overwrite one
  * another, so we merge them as arrays.
+ * watch handler是数组，看混入
  */
 strats.watch = function (
   parentVal: ?Object,
@@ -226,7 +228,7 @@ strats.watch = function (
   }
   if (!parentVal) return childVal
   const ret = {}
-  extend(ret, parentVal)
+  extend(ret, parentVal) // 先copy parentVal
   for (const key in childVal) {
     let parent = ret[key]
     const child = childVal[key]
@@ -261,6 +263,7 @@ strats.computed = function (
   if (childVal) extend(ret, childVal)
   return ret
 }
+// provide选项merge策略
 strats.provide = mergeDataOrFn
 
 /**

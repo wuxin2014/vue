@@ -37,9 +37,9 @@ export function initMixin (Vue: Class<Component>) {
     } else {
       // $options的赋值 => mergeOptions
       vm.$options = mergeOptions(
-        resolveConstructorOptions(vm.constructor), // 实例构造函数上获取options
-        options || {},
-        vm
+        resolveConstructorOptions(vm.constructor), // 获取实例构造函数上的options
+        options || {}, // init传入的options参数
+        vm // 实例
       )
     }
     /* istanbul ignore else */

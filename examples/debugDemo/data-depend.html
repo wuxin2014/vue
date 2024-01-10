@@ -45,7 +45,7 @@
 
       /**
        * 挂载时渲染watcher执行后，render函数执行，
-       * 取值info.name: 先是this.info取值会触发属性info依赖收集, 然后this.info.name会触发属性name的依赖收集
+       * 取值info.name: 先是this.info取值会触发属性info依赖收集，还会触发childOb.dep的依赖收集, 然后this.info.name会触发属性name的依赖收集
        * 取值info.age: 先是this.info取值会触发属性info依赖收集(info之前收集过，不会重复收集), 然后this.info.age会触发属性age的依赖收集
        * 
        * methods中 handleClick函数执行时，this.info.name = 'test-name', 先是this.info的仅仅取值，Dep.Target不存在不会触发依赖收集，然后就是name的赋值了，会触发更新

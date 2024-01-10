@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Vue-Mixin</title>
+  <style>
+    body {
+      font-family: Menlo, Consolas, monospace;
+      color: #444;
+    }
+  </style>
+  <script src="../../dist/vue.js"></script>
+</head>
+
+<body>
+  <!-- item template -->
+  <script type="text/x-template" id="custom-input-template">
+    <div>
+      <input v-model="name" />
+      <span>{{ age }}</span>
+    </div>
+  </script>
+  <div id="app">
+    <custom-input :visible="visible" />
+  </div>
+  <script>
+    debugger
+    const mixin1 = {
+      created() {
+        console.log('mixin1-created!')
+      }
+    }
+    const mixin2 = {
+      created() {
+        console.log('mixin2-created!')
+      }
+    }
+    Vue.component('custom-input', {
+      template: '#custom-input-template',
+      // 局部注册组件
+			components: {
+				'my-com': {
+          template: `<div>{{content}}</div>`,
+          data() {
+            return {
+              content: 'my-com-test'
+            }
+          }
+        }
+			},
+      props: {
+        visible: {
+          type: Boolean,
+          default: false
+        },
+      },
+      mixins: [mixin1, mixin2],
+      data() {
+        return {
+          name: 'dd',
+          age: 12
+        }
+      },
+      created() {
+        console.log('component-created!')
+      }
+    })
+
+    
+    var app = new Vue({
+      el: '#app',
+      data() {
+        return { visible: false }
+      },
+      mounted() {
+        setTimeout(() => {
+          this.visible = true
+        }, 1)
+      }
+    })
+
+    /**
+     * 
+     * mixins的属性合并
+     * 1. 生命周期函数，以数组形式进行追加，顺序mixins从左到右，再到组件本身的生命周期函数
+     * 2. props,methods,inject，computed同名的会被进行覆盖，以组件中属性为主，mixins会被覆盖
+     * 3. 资源(components, filters, directives), 是以原型链形式赋值的，顶层是父类的资源对象
+     * 4. data, 以组件data为主，遇到组件没有的属性，进行属性追加。mixins从左到右进行同名会进行覆盖
+     * 5. watch合并，最终是数组，先追加的先执行，mixins中的watch先追加，组件中watch后追加
+     * 
+     */
+  </script>
+</body>
+
+</html>
