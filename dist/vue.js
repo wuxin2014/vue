@@ -2255,7 +2255,7 @@
         );
       } else if (isUndef(old)) {
         if (isUndef(cur.fns)) {
-          cur = on[name] = createFnInvoker(cur, vm);
+          cur = on[name] = createFnInvoker(cur, vm); // 创建新的函数
         }
         if (isTrue(event.once)) {
           cur = on[name] = createOnceHandler(event.name, cur, event.capture);
@@ -2540,12 +2540,12 @@
 
   /**
    * Runtime helper for resolving raw children VNodes into a slot object.
+   * 解析普通插槽
    */
   function resolveSlots (
     children,
     context
   ) {
-    debugger
     if (!children || !children.length) {
       return {}
     }
@@ -2600,7 +2600,7 @@
     prevSlots
   ) {
     var res;
-    var hasNormalSlots = Object.keys(normalSlots).length > 0;
+    var hasNormalSlots = Object.keys(normalSlots).length > 0; // 是否存在普通插槽
     var isStable = slots ? !!slots.$stable : !hasNormalSlots;
     var key = slots && slots.$key;
     if (!slots) {

@@ -11,7 +11,7 @@ export function normalizeScopedSlots (
   prevSlots?: { [key: string]: Function } | void
 ): any {
   let res
-  const hasNormalSlots = Object.keys(normalSlots).length > 0
+  const hasNormalSlots = Object.keys(normalSlots).length > 0 // 是否存在普通插槽
   const isStable = slots ? !!slots.$stable : !hasNormalSlots
   const key = slots && slots.$key
   if (!slots) {

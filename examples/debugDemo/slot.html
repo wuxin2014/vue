@@ -69,8 +69,8 @@
       //             {key:"footer",fn:function(){return [_v("Footer")]},proxy:true}
       //           ])
       //         },[
-      //           _v(" "),
-      //           _c('p',[_v(_s(name))])
+      //           _v(" "), // 注意vnode的context
+      //           _c('p',[_v(_s(name))]) // 注意vnode的context
       //         ])
       //       ],1)
       //     ])
@@ -89,6 +89,8 @@
       //     ])
       //   }
       // })
+
+      // 普通插槽又名默认插槽 => 在父组件渲染时就已经生成vnode了， 具名插槽没有，作用域插槽应该也没有
     </script>
   </body>
 </html>
