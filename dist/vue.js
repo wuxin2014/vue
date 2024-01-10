@@ -3748,12 +3748,12 @@
       };
 
       var resolve = once(function (res) {
-        // cache resolved
-        factory.resolved = ensureCtor(res, baseCtor);
+        // cache resolved 缓存执行结果
+        factory.resolved = ensureCtor(res, baseCtor); // 注意ensureCtor函数的执行
         // invoke callbacks only if this is not a synchronous resolve
         // (async resolves are shimmed as synchronous during SSR)
         if (!sync) {
-          forceRender(true);
+          forceRender(true); // 强制更新
         } else {
           owners.length = 0;
         }
@@ -3818,7 +3818,7 @@
       // return in case resolved synchronously
       return factory.loading
         ? factory.loadingComp
-        : factory.resolved
+        : factory.resolved // 关注factory.resolved的值
     }
   }
 
