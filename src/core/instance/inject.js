@@ -48,9 +48,10 @@ export function resolveInject (inject: any, vm: Component): ?Object {
       const key = keys[i]
       // #6574 in case the inject object is observed...
       if (key === '__ob__') continue
-      const provideKey = inject[key].from
+      const provideKey = inject[key].from // 从from属性中拿到provideKey
       let source = vm
       while (source) {
+        // 注意_provide属性
         if (source._provided && hasOwn(source._provided, provideKey)) {
           result[key] = source._provided[provideKey]
           break
@@ -58,6 +59,7 @@ export function resolveInject (inject: any, vm: Component): ?Object {
         source = source.$parent
       }
       if (!source) {
+        // source不存在情况下， 有default,就取default的值
         if ('default' in inject[key]) {
           const provideDefault = inject[key].default
           result[key] = typeof provideDefault === 'function'

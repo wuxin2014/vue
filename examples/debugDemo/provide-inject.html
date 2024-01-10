@@ -31,11 +31,23 @@
         components: {
           comB: {
             inject: ['foo', 'info'],
+            // inject: {
+            //   bar: {
+            //     from: "foo", // 如果与原注入属性名相同时，该属性是可选的
+            //     default: "test" // 默认值写法
+            //   },
+            //   info: {
+            //     from: "info",
+            //   },
+            // },
             template: `<div>{{ foo }}-{{info || '--'}}</div>`,
           }
         },
         // provide:{
         //   info: this.info // 取不到值
+        // },
+        // provide: {
+        //   foo: 'bar'
         // },
         provide() {
           return {

@@ -347,7 +347,7 @@ function normalizeInject (options: Object, vm: ?Component) {
   const normalized = options.inject = {}
   if (Array.isArray(inject)) {
     for (let i = 0; i < inject.length; i++) {
-      normalized[inject[i]] = { from: inject[i] }
+      normalized[inject[i]] = { from: inject[i] } // { name: { from: name } }
     }
   } else if (isPlainObject(inject)) {
     for (const key in inject) {
