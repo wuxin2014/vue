@@ -49,11 +49,11 @@ export function initLifecycle (vm: Component) {
   vm.$refs = {}
 
   vm._watcher = null // 渲染Watcher
-  vm._inactive = null
-  vm._directInactive = false
-  vm._isMounted = false
-  vm._isDestroyed = false
-  vm._isBeingDestroyed = false
+  vm._inactive = null // 是否失活
+  vm._directInactive = false // 是否直接失活
+  vm._isMounted = false // 是否已挂载
+  vm._isDestroyed = false // 是否已销毁
+  vm._isBeingDestroyed = false // 是否销毁中
 }
 
 export function lifecycleMixin (Vue: Class<Component>) {
@@ -106,7 +106,7 @@ export function lifecycleMixin (Vue: Class<Component>) {
     // remove self from parent
     const parent = vm.$parent
     if (parent && !parent._isBeingDestroyed && !vm.$options.abstract) {
-      remove(parent.$children, vm)
+      remove(parent.$children, vm) // 注意remove函数逻辑
     }
     // teardown watchers
     if (vm._watcher) {
@@ -124,7 +124,7 @@ export function lifecycleMixin (Vue: Class<Component>) {
     // call the last hook...
     vm._isDestroyed = true
     // invoke destroy hooks on current rendered tree
-    vm.__patch__(vm._vnode, null)
+    vm.__patch__(vm._vnode, null) // 销毁走的patch函数
     // fire destroyed hook
     callHook(vm, 'destroyed')
     // turn off all instance listeners.
@@ -298,6 +298,7 @@ export function updateChildComponent (
   }
 }
 
+// 是否在失活树中
 function isInInactiveTree (vm) {
   while (vm && (vm = vm.$parent)) {
     if (vm._inactive) return true
@@ -305,6 +306,7 @@ function isInInactiveTree (vm) {
   return false
 }
 
+// 激活子组件
 export function activateChildComponent (vm: Component, direct?: boolean) {
   if (direct) {
     vm._directInactive = false
@@ -315,7 +317,7 @@ export function activateChildComponent (vm: Component, direct?: boolean) {
     return
   }
   if (vm._inactive || vm._inactive === null) {
-    vm._inactive = false
+    vm._inactive = false // 失活状态设置为false
     for (let i = 0; i < vm.$children.length; i++) {
       activateChildComponent(vm.$children[i])
     }
@@ -323,6 +325,7 @@ export function activateChildComponent (vm: Component, direct?: boolean) {
   }
 }
 
+// 失活子组件
 export function deactivateChildComponent (vm: Component, direct?: boolean) {
   if (direct) {
     vm._directInactive = true

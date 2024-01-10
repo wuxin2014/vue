@@ -9,9 +9,7 @@
 <script src="../../dist/vue.js"></script>
 <div id="app">
   <div>parent</div>
-  <div @click="handClick">change title</div>
   <my @change="handClick" :title="title"></my>
-  <my :title="title2"></my>
 </div>
 <script>
   let vm = new Vue({
@@ -20,7 +18,7 @@
       my: {
         template: `
           <div style="padding: 10px">
-            <button @click="change">{{title}}</button>
+            <button @click="change">子组件-{{title}}</button>
           </div>
         `,
         props: {

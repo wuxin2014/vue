@@ -55,7 +55,7 @@ const componentVNodeHooks = {
   },
 
   prepatch (oldVnode: MountedComponentVNode, vnode: MountedComponentVNode) {
-    const options = vnode.componentOptions
+    const options = vnode.componentOptions // 获取组件选项对象
     const child = vnode.componentInstance = oldVnode.componentInstance // 将旧的vnode实例赋值给新的vnode
     updateChildComponent(
       child,
@@ -67,6 +67,8 @@ const componentVNodeHooks = {
   },
 
   insert (vnode: MountedComponentVNode) {
+    debugger
+    // context这个值要加强理解
     const { context, componentInstance } = vnode
     if (!componentInstance._isMounted) {
       componentInstance._isMounted = true

@@ -83,7 +83,7 @@ export function eventsMixin (Vue: Class<Component>) {
     const vm: Component = this
     // all
     if (!arguments.length) {
-      vm._events = Object.create(null)
+      vm._events = Object.create(null) // 清空实例上所有的订阅事件
       return vm
     }
     // array of events

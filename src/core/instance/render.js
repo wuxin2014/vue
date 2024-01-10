@@ -22,8 +22,8 @@ export function initRender (vm: Component) {
   vm._staticTrees = null // v-once cached trees
   const options = vm.$options
   const parentVnode = vm.$vnode = options._parentVnode // the placeholder node in parent tree
-  const renderContext = parentVnode && parentVnode.context // context指向父类的实例
-  vm.$slots = resolveSlots(options._renderChildren, renderContext) // 将options._renderChildren解析普通插槽的处理
+  const renderContext = parentVnode && parentVnode.context // parentVnode.context指向父类的实例
+  vm.$slots = resolveSlots(options._renderChildren, renderContext) // 解析插槽 将options._renderChildren解析普通插槽的处理
   vm.$scopedSlots = emptyObject
   // bind the createElement fn to this instance
   // so that we get proper render context inside it.

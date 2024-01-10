@@ -1,6 +1,6 @@
 /*!
  * Vue.js v2.6.14
- * (c) 2014-2023 Evan You
+ * (c) 2014-2024 Evan You
  * Released under the MIT License.
  */
 (function (global, factory) {
@@ -123,6 +123,7 @@
     for (var i = 0; i < list.length; i++) {
       map[list[i]] = true;
     }
+    // 返回新的函数
     return expectsLowerCase
       ? function (val) { return map[val.toLowerCase()]; }
       : function (val) { return map[val]; }
@@ -203,6 +204,7 @@
 
   /* istanbul ignore next */
   function polyfillBind (fn, ctx) {
+    // 传入了函数跟上下文ctx, 返回了新的函数
     function boundFn (a) {
       var l = arguments.length;
       return l
@@ -226,6 +228,7 @@
 
   /**
    * Convert an Array-like object to a real Array.
+   * 将类数组对象转换成真正的数组
    */
   function toArray (list, start) {
     start = start || 0;
@@ -346,6 +349,7 @@
    */
   function once (fn) {
     var called = false;
+    // 传入一个函数，返回一个新函数
     return function () {
       if (!called) {
         called = true;
@@ -516,7 +520,7 @@
     return function (obj) {
       for (var i = 0; i < segments.length; i++) {
         if (!obj) { return }
-        obj = obj[segments[i]];
+        obj = obj[segments[i]]; // 拿值
       }
       return obj
     }
@@ -925,17 +929,21 @@
    */
   var Observer = function Observer (value) {
     this.value = value;
-    this.dep = new Dep();
+    this.dep = new Dep(); // 这个dep的作用是什么, $set函数，观察者对象添加新的属性时，会执行dep.notify()
     this.vmCount = 0;
-    def(value, '__ob__', this); // value可能是对象，可能是数组
+    def(value, '__ob__', this);
+    // value可能是对象，可能是数组
     if (Array.isArray(value)) {
+      // 对数组的方法进行重写，以便对其拦截
       if (hasProto) {
         protoAugment(value, arrayMethods);
       } else {
         copyAugment(value, arrayMethods, arrayKeys);
       }
-      this.observeArray(value); // 数组单个元素进行观察
+      // 对数组进行监听(单个单个的)
+      this.observeArray(value); 
     } else {
+      // 对象处理
       this.walk(value);
     }
   };
@@ -1004,6 +1012,7 @@
       Object.isExtensible(value) &&
       !value._isVue
     ) {
+      // new Observer对象，对value数据进行观察
       ob = new Observer(value);
     }
     if (asRootData && ob) {
@@ -1020,9 +1029,9 @@
     key,
     val,
     customSetter,
-    shallow
+    shallow // 是否浅层观察
   ) {
-    var dep = new Dep();
+    var dep = new Dep(); // 每个key的dep
 
     var property = Object.getOwnPropertyDescriptor(obj, key);
     if (property && property.configurable === false) {
@@ -1033,10 +1042,11 @@
     var getter = property && property.get;
     var setter = property && property.set;
     if ((!getter || setter) && arguments.length === 2) { // arguments.length === 2 说明defineReactive()只传了obj,key
-      val = obj[key];
+      val = obj[key]; // 根据属性key取值
     }
 
     var childOb = !shallow && observe(val); // 继续观察val，val可能是对象或数组类型数据
+    // 使用Object.defineProperty实现对象属性监听
     Object.defineProperty(obj, key, {
       enumerable: true,
       configurable: true,
@@ -1046,7 +1056,7 @@
         if (Dep.target) {
           dep.depend();
           if (childOb) {
-            childOb.dep.depend();
+            childOb.dep.depend(); // 这行理解不够(childOb.dep添加依赖收集，在$set添加新的属性中，会执行dep.notify())
             if (Array.isArray(value)) {
               dependArray(value);
             }
@@ -1113,8 +1123,8 @@
       return val
     }
     // 数组跟对象新增项或者属性
-    defineReactive(ob.value, key, val); // 注意ob.value
-    ob.dep.notify();
+    defineReactive(ob.value, key, val); // 监听新的属性，注意ob.value
+    ob.dep.notify(); // 通知更新
     return val
   }
 
@@ -1207,7 +1217,7 @@
       if (key === '__ob__') { continue }
       toVal = to[key];
       fromVal = from[key];
-      if (!hasOwn(to, key)) { // 如果to对象中不包含当前key，set下
+      if (!hasOwn(to, key)) { // 如果to对象中不包含当前key，set下，否则以to对象为主
         set(to, key, fromVal);
       } else if (
         toVal !== fromVal &&
@@ -1257,6 +1267,7 @@
           ? parentVal.call(vm, vm)
           : parentVal;
         if (instanceData) {
+          // mergeData函数，以instanceData对象为主(遇到相同属性key时)
           return mergeData(instanceData, defaultData)
         } else {
           return defaultData
@@ -1334,7 +1345,7 @@
     vm,
     key
   ) {
-    var res = Object.create(parentVal || null);
+    var res = Object.create(parentVal || null); // 原型链进行连接
     if (childVal) {
        assertObjectType(key, childVal, vm);
       return extend(res, childVal) // 将childVal的属性赋值到res对象
@@ -1353,6 +1364,7 @@
    *
    * Watchers hashes should not overwrite one
    * another, so we merge them as arrays.
+   * watch handler是数组，看混入
    */
   strats.watch = function (
     parentVal,
@@ -1370,7 +1382,7 @@
     }
     if (!parentVal) { return childVal }
     var ret = {};
-    extend(ret, parentVal);
+    extend(ret, parentVal); // 先copy parentVal
     for (var key$1 in childVal) {
       var parent = ret[key$1];
       var child = childVal[key$1];
@@ -1405,6 +1417,7 @@
     if (childVal) { extend(ret, childVal); }
     return ret
   };
+  // provide选项merge策略
   strats.provide = mergeDataOrFn;
 
   /**
@@ -1488,7 +1501,7 @@
     var normalized = options.inject = {};
     if (Array.isArray(inject)) {
       for (var i = 0; i < inject.length; i++) {
-        normalized[inject[i]] = { from: inject[i] };
+        normalized[inject[i]] = { from: inject[i] }; // { name: { from: name } }
       }
     } else if (isPlainObject(inject)) {
       for (var key in inject) {
@@ -2165,6 +2178,7 @@
   function _traverse (val, seen) {
     var i, keys;
     var isA = Array.isArray(val);
+    // val不是数组，不是对象，冻结对象，VNode对象
     if ((!isA && !isObject(val)) || Object.isFrozen(val) || val instanceof VNode) {
       return
     }
@@ -2494,9 +2508,10 @@
         var key = keys[i];
         // #6574 in case the inject object is observed...
         if (key === '__ob__') { continue }
-        var provideKey = inject[key].from;
+        var provideKey = inject[key].from; // 从from属性中拿到provideKey
         var source = vm;
         while (source) {
+          // 注意_provide属性
           if (source._provided && hasOwn(source._provided, provideKey)) {
             result[key] = source._provided[provideKey];
             break
@@ -2504,6 +2519,7 @@
           source = source.$parent;
         }
         if (!source) {
+          // source不存在情况下， 有default,就取default的值
           if ('default' in inject[key]) {
             var provideDefault = inject[key].default;
             result[key] = typeof provideDefault === 'function'
@@ -3180,7 +3196,7 @@
     },
 
     prepatch: function prepatch (oldVnode, vnode) {
-      var options = vnode.componentOptions;
+      var options = vnode.componentOptions; // 获取组件选项对象
       var child = vnode.componentInstance = oldVnode.componentInstance; // 将旧的vnode实例赋值给新的vnode
       updateChildComponent(
         child,
@@ -3192,6 +3208,8 @@
     },
 
     insert: function insert (vnode) {
+      debugger
+      // context这个值要加强理解
       var context = vnode.context;
       var componentInstance = vnode.componentInstance;
       if (!componentInstance._isMounted) {
@@ -3548,8 +3566,8 @@
     vm._staticTrees = null; // v-once cached trees
     var options = vm.$options;
     var parentVnode = vm.$vnode = options._parentVnode; // the placeholder node in parent tree
-    var renderContext = parentVnode && parentVnode.context; // context指向父类的实例
-    vm.$slots = resolveSlots(options._renderChildren, renderContext); // 将options._renderChildren解析普通插槽的处理
+    var renderContext = parentVnode && parentVnode.context; // parentVnode.context指向父类的实例
+    vm.$slots = resolveSlots(options._renderChildren, renderContext); // 解析插槽 将options._renderChildren解析普通插槽的处理
     vm.$scopedSlots = emptyObject;
     // bind the createElement fn to this instance
     // so that we get proper render context inside it.
@@ -3894,7 +3912,7 @@
       var vm = this;
       // all
       if (!arguments.length) {
-        vm._events = Object.create(null);
+        vm._events = Object.create(null); // 清空实例上所有的订阅事件
         return vm
       }
       // array of events
@@ -3986,11 +4004,11 @@
     vm.$refs = {};
 
     vm._watcher = null; // 渲染Watcher
-    vm._inactive = null;
-    vm._directInactive = false;
-    vm._isMounted = false;
-    vm._isDestroyed = false;
-    vm._isBeingDestroyed = false;
+    vm._inactive = null; // 是否失活
+    vm._directInactive = false; // 是否直接失活
+    vm._isMounted = false; // 是否已挂载
+    vm._isDestroyed = false; // 是否已销毁
+    vm._isBeingDestroyed = false; // 是否销毁中
   }
 
   function lifecycleMixin (Vue) {
@@ -4043,7 +4061,7 @@
       // remove self from parent
       var parent = vm.$parent;
       if (parent && !parent._isBeingDestroyed && !vm.$options.abstract) {
-        remove(parent.$children, vm);
+        remove(parent.$children, vm); // 注意remove函数逻辑
       }
       // teardown watchers
       if (vm._watcher) {
@@ -4061,7 +4079,7 @@
       // call the last hook...
       vm._isDestroyed = true;
       // invoke destroy hooks on current rendered tree
-      vm.__patch__(vm._vnode, null);
+      vm.__patch__(vm._vnode, null); // 销毁走的patch函数
       // fire destroyed hook
       callHook(vm, 'destroyed');
       // turn off all instance listeners.
@@ -4235,6 +4253,7 @@
     }
   }
 
+  // 是否在失活树中
   function isInInactiveTree (vm) {
     while (vm && (vm = vm.$parent)) {
       if (vm._inactive) { return true }
@@ -4242,6 +4261,7 @@
     return false
   }
 
+  // 激活子组件
   function activateChildComponent (vm, direct) {
     if (direct) {
       vm._directInactive = false;
@@ -4252,7 +4272,7 @@
       return
     }
     if (vm._inactive || vm._inactive === null) {
-      vm._inactive = false;
+      vm._inactive = false; // 失活状态设置为false
       for (var i = 0; i < vm.$children.length; i++) {
         activateChildComponent(vm.$children[i]);
       }
@@ -4260,6 +4280,7 @@
     }
   }
 
+  // 失活子组件
   function deactivateChildComponent (vm, direct) {
     if (direct) {
       vm._directInactive = true;
@@ -4520,7 +4541,7 @@
     if (typeof expOrFn === 'function') {
       this.getter = expOrFn;
     } else {
-      this.getter = parsePath(expOrFn); // 注意这个函数
+      this.getter = parsePath(expOrFn); // parsePath函数里，返回了一个函数
       if (!this.getter) {
         this.getter = noop;
          warn(
@@ -4531,6 +4552,7 @@
         );
       }
     }
+    // 取值逻辑
     this.value = this.lazy
       ? undefined
       : this.get();
@@ -4540,7 +4562,7 @@
    * Evaluate the getter, and re-collect dependencies.
    */
   Watcher.prototype.get = function get () {
-    pushTarget(this);
+    pushTarget(this); // 注意pushTarget
     var value;
     var vm = this.vm;
     try {
@@ -4557,7 +4579,7 @@
       if (this.deep) {
         traverse(value);
       }
-      popTarget();
+      popTarget(); // 注意popTarget
       this.cleanupDeps(); // 注意这个函数的调用
     }
     return value
@@ -4620,7 +4642,9 @@
    */
   Watcher.prototype.run = function run () {
     if (this.active) {
+      // 获取新值
       var value = this.get();
+      // 新值旧值比较
       if (
         value !== this.value ||
         // Deep watchers and watchers on Object/Arrays should fire even
@@ -4634,7 +4658,7 @@
         this.value = value;
         if (this.user) {
           var info = "callback for watcher \"" + (this.expression) + "\"";
-          // userWatcher, 新值跟旧值问题
+          // userWatcher, cb回调函数执行
           invokeWithErrorHandling(this.cb, this.vm, [value, oldValue], this.vm, info);
         } else {
           this.cb.call(this.vm, value, oldValue);
@@ -4802,7 +4826,7 @@
         proxy(vm, "_data", key);
       }
     }
-    // observe data
+    // observe data 观察对象
     observe(data, true /* asRootData */);
   }
 
@@ -4904,7 +4928,7 @@
       var watcher = this._computedWatchers && this._computedWatchers[key];
       if (watcher) {
         if (watcher.dirty) {
-          watcher.evaluate(); // 首次取值watcher.dirty为true,直接计算取值，并将watcher.dirty改为alse
+          watcher.evaluate(); // 首次取值watcher.dirty为true,直接计算取值，并将watcher.dirty改为false
         }
         if (Dep.target) {
           // 回到computer wacher之前的watcher, 对于watcher newDepIds没有存在dep.id添加下
@@ -4945,7 +4969,7 @@
           );
         }
       }
-      // methods处理，直接放到vm了实例上, 注意bind()
+      // methods处理，直接放到vm了实例上, 注意bind函数会改变this指向
       vm[key] = typeof methods[key] !== 'function' ? noop : bind(methods[key], vm);
     }
   }
@@ -4953,13 +4977,13 @@
   function initWatch (vm, watch) {
     debugger
     for (var key in watch) {
-      var handler = watch[key];
+      var handler = watch[key]; // 对象，函数，字符串，数组(没理解)
       if (Array.isArray(handler)) {
         for (var i = 0; i < handler.length; i++) {
           createWatcher(vm, key, handler[i]);
         }
       } else {
-        createWatcher(vm, key, handler);
+        createWatcher(vm, key, handler); // 看createWatcher函数中参数，key是函数有点懵
       }
     }
   }
@@ -4970,15 +4994,16 @@
     handler,
     options
   ) {
-    // handler可能是对象，函数，字符串(没理解)
+    // handler可能是对象，函数，字符串
     if (isPlainObject(handler)) {
       options = handler;
       handler = handler.handler;
     }
-    // handler如果是字符串,从vm上取
+    // handler如果是字符串,从vm实例上取
     if (typeof handler === 'string') {
       handler = vm[handler];
     }
+    // 入参我理解为：监听什么字段参数，回调函数参数，选项参数
     return vm.$watch(expOrFn, handler, options)
   }
 
@@ -5014,6 +5039,7 @@
       options
     ) {
       var vm = this;
+      // 为普通对象，还未理解
       if (isPlainObject(cb)) {
         return createWatcher(vm, expOrFn, cb, options)
       }
@@ -5063,9 +5089,9 @@
       } else {
         // $options的赋值 => mergeOptions
         vm.$options = mergeOptions(
-          resolveConstructorOptions(vm.constructor), // 实例构造函数上获取options
-          options || {},
-          vm
+          resolveConstructorOptions(vm.constructor), // 获取实例构造函数上的options
+          options || {}, // init传入的options参数
+          vm // 实例
         );
       }
       /* istanbul ignore else */
@@ -5231,12 +5257,12 @@
       if ( name) {
         validateComponentName(name);
       }
-      // 构建子类构造函数
+      // 定义子类构造函数
       var Sub = function VueComponent (options) {
         this._init(options);
       };
       Sub.prototype = Object.create(Super.prototype);
-      Sub.prototype.constructor = Sub;
+      Sub.prototype.constructor = Sub; // 函数的原型对象的constructor属性 => 函数
       Sub.cid = cid++;
       //注意子类构造函数上options选项合并
       Sub.options = mergeOptions(
@@ -5286,7 +5312,7 @@
   function initProps$1 (Comp) {
     var props = Comp.options.props;
     for (var key in props) {
-      proxy(Comp.prototype, "_props", key); // 
+      proxy(Comp.prototype, "_props", key); // 定义_props
     }
   }
 

@@ -29,12 +29,12 @@ export function initExtend (Vue: GlobalAPI) {
     if (process.env.NODE_ENV !== 'production' && name) {
       validateComponentName(name)
     }
-    // 构建子类构造函数
+    // 定义子类构造函数
     const Sub = function VueComponent (options) {
       this._init(options)
     }
     Sub.prototype = Object.create(Super.prototype)
-    Sub.prototype.constructor = Sub
+    Sub.prototype.constructor = Sub // 函数的原型对象的constructor属性 => 函数
     Sub.cid = cid++
     //注意子类构造函数上options选项合并
     Sub.options = mergeOptions(
@@ -84,7 +84,7 @@ export function initExtend (Vue: GlobalAPI) {
 function initProps (Comp) {
   const props = Comp.options.props
   for (const key in props) {
-    proxy(Comp.prototype, `_props`, key) // 
+    proxy(Comp.prototype, `_props`, key) // 定义_props
   }
 }
 
