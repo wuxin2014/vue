@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Vue-Mixin</title>
+  <style>
+    body {
+      font-family: Menlo, Consolas, monospace;
+      color: #444;
+    }
+  </style>
+  <script src="../../dist/vue.js"></script>
+</head>
+
+<body>
+  <!-- item template -->
+  <script type="text/x-template" id="custom-input-template">
+    <div>
+      <input v-model="name" v-focus />
+    </div>
+  </script>
+  <div id="app">
+    <custom-input />
+  </div>
+  <script>
+    debugger
+    const mixin1 = {
+      directives: {
+        focus: {
+          bind(el, binding, vnode, oldVnode) {
+            el.style.border = '1px solid red'
+          },
+          inserted(el, binding, vnode, oldVnode) {
+            el.focus()
+          },
+          update(el, binding, vnode, oldVnode) {},
+          componentUpdated(el, binding, vnode, oldVnode) {},
+          unbind(el, binding, vnode, oldVnode) {}
+        }
+      }
+    }
+    const mixin2 = {
+      directives: {
+        focus: {
+          bind(el, binding, vnode, oldVnode) {
+            el.style.border = '1px solid green'
+          },
+          inserted(el, binding, vnode, oldVnode) {
+            el.focus()
+          },
+          update(el, binding, vnode, oldVnode) {},
+          componentUpdated(el, binding, vnode, oldVnode) {},
+          unbind(el, binding, vnode, oldVnode) {}
+        }
+      }
+    }
+    Vue.component('custom-input', {
+      template: '#custom-input-template',
+      mixins: [mixin1, mixin2],
+      // 指令的定义
+      directives: {
+        focus: {
+          bind(el, binding, vnode, oldVnode) {
+            el.style.border = '1px solid pink'
+          },
+          inserted(el, binding, vnode, oldVnode) {
+            el.focus()
+          },
+          update(el, binding, vnode, oldVnode) {},
+          componentUpdated(el, binding, vnode, oldVnode) {},
+          unbind(el, binding, vnode, oldVnode) {}
+        }
+      },
+      data() {
+        return {
+          name: 'dd',
+        }
+      },
+      mounted() {
+        console.log('===', this)
+      }
+    })
+
+    
+    var app = new Vue({
+      el: '#app',
+      data() {
+        return { visible: false }
+      }
+    })
+
+    /**
+     * 
+     * mixins的属性合并
+     * 1. 生命周期函数，以数组形式进行追加，顺序mixins从左到右，再到组件本身的生命周期函数
+     * 2. props,methods,inject，computed同名的会被进行覆盖，以组件中属性为主，mixins会被覆盖
+     * 3. 资源(components, filters, directives), 是以原型链形式赋值的，顶层是父类的资源对象
+     * 4. data, 以组件data为主，遇到组件没有的属性，进行属性追加。mixins从左到右进行同名会进行覆盖
+     * 5. watch合并，最终是数组，先追加的先执行，mixins中的watch先追加，组件中watch后追加
+     * 
+     */
+  </script>
+</body>
+
+</html>

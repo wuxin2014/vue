@@ -315,8 +315,8 @@ export function createPatchFunction (backend) {
     }
     i = vnode.data.hook // Reuse variable
     if (isDef(i)) {
-      if (isDef(i.create)) i.create(emptyNode, vnode) // i.create是指令钩子
-      if (isDef(i.insert)) insertedVnodeQueue.push(vnode) // i.insert是componnetVnodeHooks中insert钩子函数,也可能是指令钩子
+      if (isDef(i.create)) i.create(emptyNode, vnode) // i.create是什么待看
+      if (isDef(i.insert)) insertedVnodeQueue.push(vnode) // i.insert自定义指令在data.hook上添加的函数
     }
   }
 
@@ -596,7 +596,7 @@ export function createPatchFunction (backend) {
       vnode.parent.data.pendingInsert = queue  // 注意这里的赋值 vnode.parent 指向 组件vnode
     } else {
       for (let i = 0; i < queue.length; ++i) {
-        queue[i].data.hook.insert(queue[i])  // 会执行组件mounted生命周期
+        queue[i].data.hook.insert(queue[i])  // 最终会执行组件mounted生命周期 或者 指令的inserted函数
       }
     }
   }

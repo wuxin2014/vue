@@ -33,15 +33,17 @@ function _update (oldVnode, vnode) {
     dir = newDirs[key]
     if (!oldDir) {
       // new directive, bind
-      callHook(dir, 'bind', vnode, oldVnode)
+      callHook(dir, 'bind', vnode, oldVnode) // 执行指令定义的bind函数
       if (dir.def && dir.def.inserted) {
+        // 指令上存在inserted函数，则将其指令追加到要插入的数组缓存中
         dirsWithInsert.push(dir)
       }
     } else {
       // existing directive, update
       dir.oldValue = oldDir.value
       dir.oldArg = oldDir.arg
-      callHook(dir, 'update', vnode, oldVnode)
+      callHook(dir, 'update', vnode, oldVnode) // 执行指令定义的update函数
+      // 指令上存在componentUpdated函数，则将其指令追加到要更新的数组缓存中
       if (dir.def && dir.def.componentUpdated) {
         dirsWithPostpatch.push(dir)
       }
@@ -51,11 +53,11 @@ function _update (oldVnode, vnode) {
   if (dirsWithInsert.length) {
     const callInsert = () => {
       for (let i = 0; i < dirsWithInsert.length; i++) {
-        callHook(dirsWithInsert[i], 'inserted', vnode, oldVnode)
+        callHook(dirsWithInsert[i], 'inserted', vnode, oldVnode) // 执行指令定义的inserted函数
       }
     }
     if (isCreate) {
-      mergeVNodeHook(vnode, 'insert', callInsert)
+      mergeVNodeHook(vnode, 'insert', callInsert) // 在vnode.data.hook上添加insert函数
     } else {
       callInsert()
     }
@@ -64,7 +66,7 @@ function _update (oldVnode, vnode) {
   if (dirsWithPostpatch.length) {
     mergeVNodeHook(vnode, 'postpatch', () => {
       for (let i = 0; i < dirsWithPostpatch.length; i++) {
-        callHook(dirsWithPostpatch[i], 'componentUpdated', vnode, oldVnode)
+        callHook(dirsWithPostpatch[i], 'componentUpdated', vnode, oldVnode) // 执行指令定义的componentUpdated函数
       }
     })
   }
@@ -73,7 +75,7 @@ function _update (oldVnode, vnode) {
     for (key in oldDirs) {
       if (!newDirs[key]) {
         // no longer present, unbind
-        callHook(oldDirs[key], 'unbind', oldVnode, oldVnode, isDestroy)
+        callHook(oldDirs[key], 'unbind', oldVnode, oldVnode, isDestroy) // 执行指令定义的unbind函数
       }
     }
   }
