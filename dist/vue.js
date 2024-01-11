@@ -6216,7 +6216,7 @@
     }
     // 执行创建各类别钩子 cbs.create 数组形式存储的钩子函数有: 
     // updateAttrs(oldVnode, vnode)，updateClass(oldVnode, vnode)，updateDOMListeners(oldVnode, vnode)，updateDOMProps(oldVnode, vnode)
-    // updateStyle(oldVnode, vnode)，_enter(_, vnode)，create(_, vnode)，updateDirectives(oldVnode, vnode)
+    // updateStyle(oldVnode, vnode)，_enter(_, vnode) => 跟transition有关，create(_, vnode) => 跟ref有关，updateDirectives(oldVnode, vnode)
     function invokeCreateHooks (vnode, insertedVnodeQueue) {
       for (var i$1 = 0; i$1 < cbs.create.length; ++i$1) {
         cbs.create[i$1](emptyNode, vnode);
@@ -8289,7 +8289,9 @@
 
   /*  */
 
+  // invokeCreateHook函数中 => _enter钩子函数的执行
   function enter (vnode, toggleDisplay) {
+    debugger
     var el = vnode.elm;
 
     // call leave callback now
@@ -8977,7 +8979,7 @@
           ? (String(child.key).indexOf(id) === 0 ? child.key : id + child.key)
           : child.key;
 
-      var data = (child.data || (child.data = {})).transition = extractTransitionData(this);
+      var data = (child.data || (child.data = {})).transition = extractTransitionData(this); // 给vnode.data.transition赋值了
       var oldRawChild = this._vnode;
       var oldChild = getRealChild(oldRawChild);
 
@@ -9192,6 +9194,7 @@
     }
   }
 
+  // Transition组件跟TransitionGroup组件
   var platformComponents = {
     Transition: Transition,
     TransitionGroup: TransitionGroup

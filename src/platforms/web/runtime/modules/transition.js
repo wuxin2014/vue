@@ -20,7 +20,9 @@ import {
   removeTransitionClass
 } from '../transition-util'
 
+// invokeCreateHook函数中 => _enter钩子函数的执行
 export function enter (vnode: VNodeWithData, toggleDisplay: ?() => void) {
+  debugger
   const el: any = vnode.elm
 
   // call leave callback now

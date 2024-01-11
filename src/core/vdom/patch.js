@@ -308,7 +308,7 @@ export function createPatchFunction (backend) {
   }
   // 执行创建各类别钩子 cbs.create 数组形式存储的钩子函数有: 
   // updateAttrs(oldVnode, vnode)，updateClass(oldVnode, vnode)，updateDOMListeners(oldVnode, vnode)，updateDOMProps(oldVnode, vnode)
-  // updateStyle(oldVnode, vnode)，_enter(_, vnode)，create(_, vnode)，updateDirectives(oldVnode, vnode)
+  // updateStyle(oldVnode, vnode)，_enter(_, vnode) => 跟transition有关，create(_, vnode) => 跟ref有关，updateDirectives(oldVnode, vnode)
   function invokeCreateHooks (vnode, insertedVnodeQueue) {
     for (let i = 0; i < cbs.create.length; ++i) {
       cbs.create[i](emptyNode, vnode)

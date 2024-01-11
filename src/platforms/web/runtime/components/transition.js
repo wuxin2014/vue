@@ -152,7 +152,7 @@ export default {
         ? (String(child.key).indexOf(id) === 0 ? child.key : id + child.key)
         : child.key
 
-    const data: Object = (child.data || (child.data = {})).transition = extractTransitionData(this)
+    const data: Object = (child.data || (child.data = {})).transition = extractTransitionData(this) // 给vnode.data.transition赋值了
     const oldRawChild: VNode = this._vnode
     const oldChild: VNode = getRealChild(oldRawChild)
 
