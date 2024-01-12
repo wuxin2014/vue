@@ -86,6 +86,7 @@ function shouldUpdateValue (elm: acceptValueElm, checkVal: string): boolean {
   ))
 }
 
+// document.activeElement => 聚焦元素
 function isNotInFocusAndDirty (elm: acceptValueElm, checkVal: string): boolean {
   // return true when textbox (.number and .trim) loses focus and its value is
   // not equal to the updated value

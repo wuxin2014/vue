@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+<script src="../../dist/vue.js"></script>
+<div id="app">
+  <div v-text="content"></div>
+  <div v-text="contentATag"></div>
+  <div v-text="contentImgTag"></div>
+  <div v-text="contentScriptTag"></div>
+</div>
+<script>
+  new Vue({
+    el: '#app',
+    data() {
+      return {
+        content: "<div>只在可信内容上使用 v-html，永不用在用户提交的内容上。<b>我是加粗文字</b><div>",
+        contentATag: `<a style="font-size: 18px; color: red; font-weight: bold" onclick='alert("链接xss攻击")'>链接</a>`,
+        contentImgTag: `<img src="htpp:slslskkk" onerror='alert("图片xss攻击")' />图片`,
+        contentScriptTag: "插入了一个脚本：<script>alert(1)<\/script>"
+      }
+    },
+    mounted() {
+    }
+  })
+
+  // (function anonymous() {
+  //   with(this){
+  //     return _c('div',{attrs:{"id":"app"}},[
+  //       _c('div',{domProps:{"textContent":_s(content)}}),
+  //       _v(" "),
+  //       _c('div',{domProps:{"textContent":_s(contentATag)}}),
+  //       _v(" "),
+  //       _c('div',{domProps:{"textContent":_s(contentImgTag)}}),
+  //       _v(" "),
+  //       _c('div',{domProps:{"textContent":_s(contentScriptTag)}})
+  //     ])
+  //   }
+  // })
+</script>
+</body>
+
+</html>
