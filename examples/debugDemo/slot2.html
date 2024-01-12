@@ -32,14 +32,14 @@
       }
     </script>
     <!-- App template (in DOM) -->
-    <!-- <p #default>{{name}}</p> -->
     <div id="app">
       <div id="search">
         <h1>具名插槽</h1>
         <custom-comp>
           <template #header>{{ title }}</template>
-          <template #default>{{name}}</template>
+          <template #default>具名插槽-default-{{name}}</template>
           <template #footer>Footer</template>
+          <div>默认插槽</div>
         </custom-comp>
       </div>
     </div>

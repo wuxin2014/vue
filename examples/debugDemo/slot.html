@@ -36,9 +36,10 @@
       <div id="search">
         <h1>普通&具名插槽</h1>
         <custom-comp>
-          <template #header>{{ title }}</template>
-          <p>{{name}}</p>
-          <template #footer>Footer</template>
+          <template #header>具名插槽-{{ title }}</template>
+          <p>默认插槽-{{name}}</p>
+          <template #footer>具名插槽-Footer</template>
+          <!-- <template #default>具名插槽-default-{{name}}</template> -->
         </custom-comp>
       </div>
     </div>
@@ -56,7 +57,7 @@
           }
         }
       })
-
+      // 注意：默认插槽跟具名default插槽都存在, 会渲染具名default插槽
       // (function anonymous() {
       //   with(this) {
       //     return _c('div',{attrs:{"id":"app"}},[
