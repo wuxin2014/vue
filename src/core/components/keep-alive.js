@@ -78,7 +78,7 @@ export default {
           componentInstance,
         }
         keys.push(keyToCache)
-        // prune oldest entry
+        // prune oldest entry 修剪最先加入的vnode
         if (this.max && keys.length > parseInt(this.max)) {
           pruneCacheEntry(cache, keys[0], keys, this._vnode)
         }
