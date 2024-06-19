@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>动态组件-debugger</title>
+    <style>
+      body {
+        font-family: Menlo, Consolas, monospace;
+        color: #444;
+      }
+    </style>
+    <script src="../../dist/vue.js"></script>
+  </head>
+  <body>
+    <!-- App template (in DOM) -->
+    <div id="app">
+      <button @click="handleClick">动态加载组件</button>
+      <component :is="dynamicComponent"></component>
+    </div>
+    <script>
+      Vue.component("tab-archive", {
+        template: "<div>Archive component</div>"
+      });
+      var app = new Vue({
+        el: '#app',
+        data() {
+          return {
+            dynamicComponent: null
+          }
+        },
+        methods: {
+          handleClick() {
+            debugger
+            this.dynamicComponent= "tab-archive"
+          }
+        }
+      })
+
+      /**
+       * _c(dynamicComponent,{tag:"component"})
+       * dynamicComponent可以是字符串，也可以是函数
+       */ 
+      // (function anonymous() {
+      //   with(this){
+      //     return _c('div',{attrs:{"id":"app"}},[
+      //       _c('button',{on:{"click":handleClick}},[_v("动态加载组件")]),
+      //       _v(" "),
+      //       _c(dynamicComponent,{tag:"component"})
+      //     ],1)
+      //   }
+      // })
+    </script>
+  </body>
+</html>
