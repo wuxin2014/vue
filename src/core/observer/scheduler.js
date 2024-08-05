@@ -56,7 +56,7 @@ if (inBrowser && !isIE) {
   if (
     performance &&
     typeof performance.now === 'function' &&
-    getNow() > document.createEvent('Event').timeStamp
+    getNow() > document.createEvent('Event').timeStamp // 返回事件创建的时间
   ) {
     // if the event timestamp, although evaluated AFTER the Date.now(), is
     // smaller than it, it means the event is using a hi-res timestamp,

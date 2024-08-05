@@ -4359,7 +4359,7 @@
     if (
       performance &&
       typeof performance.now === 'function' &&
-      getNow() > document.createEvent('Event').timeStamp
+      getNow() > document.createEvent('Event').timeStamp // 返回事件创建的时间
     ) {
       // if the event timestamp, although evaluated AFTER the Date.now(), is
       // smaller than it, it means the event is using a hi-res timestamp,
@@ -7847,6 +7847,7 @@
     ))
   }
 
+  // document.activeElement => 聚焦元素
   function isNotInFocusAndDirty (elm, checkVal) {
     // return true when textbox (.number and .trim) loses focus and its value is
     // not equal to the updated value
@@ -12027,6 +12028,7 @@
     template,
     options
   ) {
+    debugger
     var ast = parse(template.trim(), options);
     if (options.optimize !== false) {
       optimize(ast, options);
